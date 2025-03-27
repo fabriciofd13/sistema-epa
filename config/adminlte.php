@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'EPA N° 1 Medardo Pantoja',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>EPA</b> Medardo Pantoja',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'EPA Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -215,12 +215,12 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => false,
+    'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
-    'sidebar_scrollbar_theme' => 'os-theme-light',
-    'sidebar_scrollbar_auto_hide' => 'l',
+    'sidebar_scrollbar_theme' => 'os-theme-dark',
+    'sidebar_scrollbar_auto_hide' => true,
     'sidebar_nav_accordion' => true,
     'sidebar_nav_animation_speed' => 300,
 
@@ -300,11 +300,11 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
+        /* [
             'type' => 'navbar-search',
             'text' => 'search',
-            'topnav_right' => true,
-        ],
+            'topnav_right' => false,
+        ], */
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
@@ -313,32 +313,39 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Buscar',
         ],
-        [
+        /* [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',
-        ],
-        [
+        ], */
+        /* [
             'text' => 'pages',
             'url' => 'admin/pages',
             'icon' => 'far fa-fw fa-file',
             'label' => 4,
             'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
+        ], */
+        /* ['header' => 'account_settings',
+            'text' => 'Ajustes de Cuenta'], */
+        /* [
             'text' => 'profile',
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
+        ], */
+        ['header' => 'AJUSTES'],
+        [
+            'text' => 'Página Principal',
+            'url' => 'home',
+            'icon' => 'fas fa-fw fa-home',
         ],
         [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
+            'text' => 'Cambiar Contraseña',
+            'url' => '/profile/change-password',
             'icon' => 'fas fa-fw fa-lock',
         ],
-        [
+        /* [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
@@ -375,22 +382,27 @@ return [
                     'url' => '#',
                 ],
             ],
-        ],
-        ['header' => 'labels'],
+        ], */
+        ['header' => 'ACCIONES'],
         [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
-        ],
-        [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
-        ],
-        [
-            'text' => 'information',
+            'text' => 'Nuevo Alumno',
             'icon_color' => 'cyan',
-            'url' => '#',
+            'url' => 'alumnos/create',
+        ],
+        [
+            'text' => 'Lista Alumnos',
+            'icon_color' => 'gray',
+            'url' => '/alumnos',
+        ],
+        [
+            'text' => 'Cursos',
+            'icon_color' => 'green',
+            'url' => '/cursos',
+        ],
+        [
+            'text' => 'Lista Usuarios',
+            'icon_color' => 'cyan',
+            'url' => '/users',
         ],
     ],
 
@@ -429,23 +441,63 @@ return [
     */
 
     'plugins' => [
-        'Datatables' => [
-            'active' => false,
+
+        // 1. jQuery (CDN)
+        'jQuery' => [
+            'active' => true,
             'files' => [
                 [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
+                    'type'     => 'js',
+                    'asset'    => false, // <-- IMPORTANTE: "false" para indicar que es un enlace externo
+                    'location' => 'https://code.jquery.com/jquery-3.6.0.min.js',
+                ],
+            ],
+        ],
+
+        // 2. DataTables (CDN)
+        'Datatables' => [
+            'active' => true,  // Asegúrate de que esté en true
+            'files' => [
+                [
+                    'type'     => 'js',
+                    'asset'    => false,
+                    // Puedes usar la versión de DataTables que prefieras (aquí uso 1.13.4)
+                    'location' => 'https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js',
                 ],
                 [
-                    'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                    'type'     => 'js',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js',
                 ],
                 [
-                    'type' => 'css',
-                    'asset' => false,
-                    'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
+                    'type'     => 'css',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css',
+                ],
+                // CSS para los botones con Bootstrap 4
+                [
+                    'type'     => 'css',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap4.min.css',
+                ],
+                // JS principal para los botones de DataTables
+                [
+                    'type'     => 'js',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js',
+                ],
+                // JS de integración con Bootstrap 4 para los botones
+                [
+                    'type'     => 'js',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap4.min.js',
+                ],
+                //https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js
+                // JS de integración con Bootstrap 4 para los botones
+                [
+                    'type'     => 'js',
+                    'asset'    => false,
+                    'location' => 'https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js',
                 ],
             ],
         ],

@@ -1,0 +1,72 @@
+/* Estilos personalizados para el modal */
+.modal-header {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+/* Estilo de la tabla similar a Excel */
+.table-excel {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+.table-excel th,
+.table-excel td {
+    border: 1px solid #d1d1d1;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-excel th {
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+
+.table-excel tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-excel tr:hover {
+    background-color: #e6f7ff;
+}
+
+/* Estilo de los inputs para que parezcan celdas de Excel */
+.table-excel input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Resaltar input activo */
+.table-excel input:focus {
+    background-color: #ffffcc;
+    border: 1px solid #ffaa00;
+}
+
+/* Colores según la nota */
+.table-excel input[data-value="1"],
+.table-excel input[data-value="2"],
+.table-excel input[data-value="3"] {
+    color: red;
+}
+
+.table-excel input[data-value="4"],
+.table-excel input[data-value="5"] {
+    color: green;
+}
+
+.table-excel input[data-value="6"],
+.table-excel input[data-value="7"],
+.table-excel input[data-value="8"],
+.table-excel input[data-value="9"],
+.table-excel input[data-value="10"] {
+    color: black;
+}
