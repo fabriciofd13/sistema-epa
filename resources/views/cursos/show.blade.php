@@ -11,6 +11,9 @@
             <span class="badge bg-light border border-secondary"><strong>{{ $curso->anio_lectivo }}</strong></span>
         </h4>
         <div class="d-flex">
+            <a href="{{ route('cursos.imprimir', $curso->id) }}" target="_blank" class="btn btn-outline-dark ms-2" title="Imprimir PDF">
+                <i class="fas fa-print"></i> Imprimir
+            </a>
             <a href="{{ route('cursos.asignar_preceptor', $curso->id) }}" title="Asignar Preceptor [Ctrl + Q]"
                 class="btn btn-outline-warning me-2">
                 <i class="fas fa-user-tie"></i> Asignar Preceptor
@@ -47,7 +50,7 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="table-responsive">
+                {{-- <div class="table-responsive">
                     @if (count($curso->historialAcademico))
                         <table class="table table-striped" id="alumnosporcurso">
                             <thead>
@@ -95,7 +98,96 @@
                             </div>
                         </div>
                     @endif
+                </div> --}}
+                <div class="table-responsive">
+                    @if (count($curso->historialAcademico))
+                        <table class="table table-striped" id="alumnosporcurso">
+                            <thead>
+                                <tr>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>DNI</th>
+                                    <th>Tutor/Telefono</th>
+                                    <th>Teléfono</th>
+                                    <th>Previas</th> {{-- 👈 NUEVA COLUMNA --}}
+                                    <th class="col-acciones">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($curso->historialAcademico as $historial)
+                                    @php
+                                        $al = $historial->alumno;
+                                        $p = $previasPorAlumno[$al->id] ?? [
+                                            'status' => 'ok',
+                                            'count' => 0,
+                                            'preview' => '',
+                                        ];
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $al->apellido }}</td>
+                                        <td>{{ $al->nombre }}</td>
+                                        <td>{{ $al->dni }}</td>
+                                        <td>
+                                            {{ $al->apellido_tutor ?? 'No registrado' }}
+                                            {{ $al->nombre_tutor }}<br>
+                                            {{ $al->celular_tutor ?? 'No registra celular' }}
+                                        </td>
+                                        <td>{{ $al->telefono ?? 'No registrado' }}</td>
+
+                                        {{-- Celda Previas --}}
+                                        <td class="text-center">
+                                            @if ($p['status'] === 'faltan')
+                                                <span class="badge bg-warning text-dark"
+                                                    title="Faltan cargar notas en años anteriores">
+                                                    Faltan notas
+                                                </span>
+                                            @elseif ($p['count'] > 0)
+                                                <span class="badge bg-danger" title="Materias adeudadas en años anteriores">
+                                                    {{ $p['count'] }}
+                                                </span>
+                                                @if ($p['preview'])
+                                                    <br><small class="text-muted">{{ $p['preview'] }}</small>
+                                                @endif
+                                            @else
+                                                <span class="text-muted">Sin previas</span>
+                                            @endif
+                                        </td>
+
+                                        {{-- Acciones --}}
+                                        <td class="col-acciones">
+                                            {{-- Ficha académica / historial --}}
+                                            <a href="{{ route('historial.index', $al->id) }}" class="btn btn-info btn-sm"
+                                                title="Ver Historial Académico">
+                                                <i class="fas fa-folder-open"></i>
+                                            </a>
+
+                                            {{-- (Opcional) Ver ficha del alumno --}}
+                                            <a href="{{ url('alumnos/' . $al->id) }}" class="btn btn-secondary btn-sm"
+                                                title="Ver Ficha del Alumno">
+                                                <i class="fas fa-id-card"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">
+                                            No hay alumnos inscriptos en este curso.
+                                            <a href="{{ route('cursos.agregarAlumnos', $curso->id) }}">Inscribir</a>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    @else
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                No hay alumnos inscriptos en este curso.
+                                <a href="{{ route('cursos.agregarAlumnos', $curso->id) }}">Inscribir</a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
+
             </div>
         </div>
     </div>

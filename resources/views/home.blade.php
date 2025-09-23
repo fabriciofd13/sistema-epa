@@ -15,7 +15,7 @@
     <div class="wrapper d-flex flex-column min-vh-100">
         <div class="container">
             <div class="row mt-4">
-                <!-- Columna izquierda: Buscador -->
+
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-header bg-primary text-white">
@@ -27,19 +27,17 @@
                     </div>
                 </div>
 
-                <!-- Columna derecha: Resultados -->
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header bg-secondary text-white">
                             Resultados
                         </div>
                         <div class="card-body">
-                            {{-- Mensaje inicial --}}
+
                             <div id="mensaje-inicial" class="text-center text-muted">
                                 Ingrese un apellido, nombre o DNI para buscar un alumno y ver su ficha académica.
                             </div>
 
-                            {{-- Tabla (inicialmente oculta) --}}
                             <table class="table table-bordered table-hover d-none" id="tabla-resultados">
                                 <thead class="table-light">
                                     <tr>
@@ -53,6 +51,49 @@
                             </table>
                         </div>
 
+                    </div>
+                </div>
+            </div>
+
+            {{-- Buscador de Cursos --}}
+            <div class="row mt-4">
+                <!-- Columna izquierda -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            Buscar Curso
+                        </div>
+                        <div class="card-body">
+                            <input type="text" id="buscador-curso" class="form-control"
+                                placeholder="Nombre, Año o Preceptor">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            Resultados Cursos
+                        </div>
+                        <div class="card-body">
+                            <div id="mensaje-inicial-curso" class="text-center text-muted">
+                                Ingrese nombre, año o preceptor para buscar un curso.
+                            </div>
+
+                            <table class="table table-bordered table-hover d-none" id="tabla-cursos">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Curso</th>
+                                        <th>Año lectivo</th>
+                                        <th>Cant. alumnos</th>
+                                        <th>Preceptor</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -232,6 +273,69 @@
             }
         });
     </script>
+    <script>
+        const tablaCursos = document.getElementById('tabla-cursos');
+        const tbodyCursos = tablaCursos.querySelector('tbody');
+        const msgCurso = document.getElementById('mensaje-inicial-curso');
 
+        const rutaShowCurso = @json(route('cursos.show', ':id'));
+        const rutaAsignarPrec = @json(route('cursos.asignar_preceptor', ':id'));
+        const rutaAgregarAlumnos = @json(route('cursos.agregarAlumnos', ':id'));
+        const rutaImprimirCurso = @json(route('cursos.imprimir', ':id'));
+
+        function r(urlBase, id) {
+            return urlBase.replace(':id', id);
+        }
+
+        document.getElementById('buscador-curso').addEventListener('keyup', function() {
+            let q = this.value.trim();
+
+            if (q.length >= 2) {
+                fetch("{{ route('cursos.buscar') }}?q=" + encodeURIComponent(q))
+                    .then(res => res.json())
+                    .then(data => {
+                        tbodyCursos.innerHTML = '';
+
+                        if (data.length === 0) {
+                            tablaCursos.classList.add('d-none');
+                            msgCurso.classList.remove('d-none');
+                            msgCurso.textContent = "No se encontraron cursos.";
+                        } else {
+                            tablaCursos.classList.remove('d-none');
+                            msgCurso.classList.add('d-none');
+
+                            data.forEach(curso => {
+                                tbodyCursos.innerHTML += `
+                                <tr>
+                                    <td>${curso.nombre}</td>
+                                    <td>${curso.anio_lectivo}</td>
+                                    <td>${curso.cantidad_alumnos}</td>
+                                    <td>${curso.preceptor}</td>
+                                    <td class="text-center">
+                                        <a href="${r(rutaShowCurso, curso.id)}" class="btn btn-success btn-sm" title="Ver Curso">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="${r(rutaAsignarPrec, curso.id)}" class="btn btn-warning btn-sm" title="Cambiar Preceptor">
+                                            <i class="fas fa-user-tie"></i>
+                                        </a>
+                                        <a href="${r(rutaAgregarAlumnos, curso.id)}" class="btn btn-primary btn-sm" title="Agregar Alumnos">
+                                            <i class="fas fa-user-plus"></i>
+                                        </a>
+                                        <a href="${r(rutaImprimirCurso, curso.id)}" class="btn btn-outline-dark btn-sm" title="Imprimir PDF">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
+                            });
+                        }
+                    });
+            } else {
+                tablaCursos.classList.add('d-none');
+                msgCurso.classList.remove('d-none');
+                msgCurso.textContent = "Ingrese nombre, año o preceptor para buscar un curso.";
+            }
+        });
+    </script>
 
 @endsection

@@ -78,6 +78,10 @@ Route::post('/cursos/{id}/agregar-alumnos', [CursoDivisionController::class, 'ag
 Route::get('curso-division/{id}/asignar-preceptor', [CursoDivisionController::class, 'asignarPreceptorForm'])->name('cursos.asignar_preceptor');
 Route::post('curso-division/{id}/asignar-preceptor', [CursoDivisionController::class, 'asignarPreceptor'])->name('cursos.guardar_preceptor');
 Route::get('/preceptor/mis-cursos', [CursoDivisionController::class, 'misCursos'])->name('preceptor.cursos');
+Route::get('/cursos/{id}/imprimir', [App\Http\Controllers\CursoDivisionController::class, 'imprimir'])
+    ->name('cursos.imprimir');
+// Buscador de cursos (JSON)
+Route::get('/buscar-cursos', [CursoDivisionController::class, 'buscar'])->name('cursos.buscar');
 
 
 
