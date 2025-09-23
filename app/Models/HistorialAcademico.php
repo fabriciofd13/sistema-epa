@@ -26,4 +26,5 @@ class HistorialAcademico extends Model
     {
         return $this->hasMany(Nota::class, 'id_historial_academico', 'id');
     }
+    
 }

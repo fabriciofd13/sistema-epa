@@ -12,6 +12,7 @@
         .table-container {
             max-height: 500px;
             overflow: auto;
+            font-size: 11px;
         }
 
         /* Tabla */
@@ -20,6 +21,7 @@
             width: 100%;
             table-layout: fixed;
             /* Mantiene el tamaño de las celdas sin que se deformen */
+            font-size: 11px;
         }
 
         /* Fila superior de materias */
@@ -38,16 +40,16 @@
             top: 0;
             background-color: #fff;
             z-index: 10;
-            width: 80px;
+            width: 55px;
             /* Ajuste del ancho de las columnas de materias */
             overflow: hidden;
             /* Evita que el texto sobresalga */
             text-overflow: ellipsis;
             /* Agrega puntos suspensivos si el texto es muy largo */
-
             word-wrap: break-word;
             white-space: normal;
             overflow-wrap: break-word;
+            font-size: 11px;
         }
 
         /* Fijar la primera columna (Nombres de alumnos) */
@@ -62,7 +64,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-
+            font-size: 11px;
         }
 
         /* Ajustar el ancho de las columnas de materias */
@@ -75,6 +77,7 @@
             /* Ancho de las columnas de materias */
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 11px;
         }
     </style>
 
@@ -82,14 +85,14 @@
 @endsection
 
 @section('content')
-@if (session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
     <div class="container">
         <form id="notasForm" action="{{ route('notas.guardar_etapa', ['curso_id' => $curso->id, 'etapa' => $etapa]) }}"
-            method="POST">
+            method="POST" autocomplete="off">
             @csrf
             <div class="table-responsive">
                 <table class="table table-bordered table-excel">
@@ -102,21 +105,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($alumnos as $alumno)
+                        @foreach ($historiales as $historial)
+                            @php
+                                $alumno = $historial->alumno;
+                            @endphp
                             <tr>
                                 <td>{{ $alumno->apellido }}, {{ $alumno->nombre }}</td>
                                 @foreach ($materias as $materia)
                                     @php
-                                        $nota = $notas[$alumno->id . '-' . $materia->id] ?? null;
+                                        $nota = $notas[$historial->id . '-' . $materia->id] ?? null;
                                     @endphp
                                     <td>
-                                        <input type="text" name="notas[{{ $alumno->id }}][{{ $materia->id }}]"
-                                            class="form-control nota-input" value="{{ $nota ? $nota->$etapa : '' }}">
+                                        <input type="text"
+                                        name="notas[{{ $historial->id }}][{{ $materia->id }}]"
+                                        class="form-control nota-input"
+                                        value="{{ isset($nota) && $nota->$etapa !== null ? intval($nota->$etapa) : '' }}">
+                                 
                                     </td>
                                 @endforeach
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
             <button type="submit" class="btn btn-success">Guardar Notas</button>
@@ -163,7 +173,7 @@
 
             inputs.forEach((input, index) => {
                 input.addEventListener("keydown", (e) => {
-                    const colCount = inputs.length / {{ count($alumnos) }};
+                    const colCount = inputs.length / {{ count($historiales) }};
                     const currentIndex = inputs.indexOf(e.target);
 
                     switch (e.key) {

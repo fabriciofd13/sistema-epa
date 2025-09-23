@@ -21,16 +21,23 @@
 @section('content')
     <div class="container">
         <div class="card p-4">
-           <form action="{{ route('historial.guardar', ['alumno' => $alumno->id]) }}" method="POST">
+            <form action="{{ route('historial.guardar', ['alumno' => $alumno->id]) }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label">Año Lectivo</label>
-                    <input type="number" min="2000" max="2050" minlength="4" maxlength="4" name="anio_lectivo"
+                    <input type="number" min="2000" max="2100" minlength="4" maxlength="4" name="anio_lectivo"
                         class="form-control" required>
                 </div>
                 <div class="mb-3">
+                    <style>
+                        .select2-container--default .select2-selection--single {
+                            height: 42px !important;
+                            padding: 8px 12px;
+                            font-size: 1rem;
+                        }
+                    </style>                                        
                     <label class="form-label">Curso</label>
-                    <select name="id_curso" class="form-control" required>
+                    <select name="id_curso" id="select-curso" class="form-select" required>
                         <option value="">Seleccione un curso</option>
                         @foreach ($cursos as $curso)
                             <option value="{{ $curso->id }}">{{ $curso->nombre }} ({{ $curso->anio_lectivo }})</option>
@@ -39,7 +46,8 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="cooperadora">Cooperadora</label>
-                    <input type="number" min="0" max="50000" name="cooperadora" class="form-control">
+                    <input type="number" min="0" max="50000" minlength="2" maxlength="6 " name="cooperadora"
+                        class="form-control">
                 </div>
                 <button type="submit" class="btn btn-success">Registrar</button>
                 <a href="{{ route('historial.index', $alumno->id) }}" class="btn btn-secondary">Cancelar</a>
@@ -49,10 +57,20 @@
     </div>
 @endsection
 @section('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#select-curso').select2({
+                placeholder: 'Seleccione un curso',
+                width: '100%' // Asegura que tome el ancho completo del form-control
+            });
+        });
+    </script>
     <script>
         console.log('Página de inicio cargada correctamente');
     </script>

@@ -9,6 +9,14 @@
             <span class="badge bg-light border border-secondary">Lista de Cursos por Año</span>
         </h4>
         <div class="d-flex">
+            @php
+                $user = Auth::user();
+            @endphp
+            @if ($user->id_preceptor)
+                <a href="{{ route('preceptor.cursos') }}" class="btn btn-outline-primary float-left">
+                  <i class="fas fa-chalkboard-teacher"></i><strong> MIS CURSOS</strong>
+                </a>
+            @endif
             <a href="{{ route('home') }}" title="Volver [Ctrl + X]" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i>
             </a>
@@ -53,8 +61,16 @@
                                                         {{ $curso->historialAcademico->count() }}
                                                     </p>
                                                     <a href="{{ route('cursos.show', $curso->id) }}"
-                                                        class="btn btn-primary">
-                                                        <i class="fas fa-eye"></i> Ver Alumnos
+                                                        class="btn btn-success" title="Ver Curso">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="{{ route('cursos.asignar_preceptor', $curso->id) }}"
+                                                        class="btn btn-warning" title="Cambiar Preceptor">
+                                                        <i class="fas fa-user-tie"></i>
+                                                    </a>
+                                                    <a href="{{ route('cursos.agregarAlumnos', $curso->id) }}"
+                                                        class="btn btn-primary" title="Agregar Alumnos">
+                                                        <i class="fas fa-user-plus"></i>
                                                     </a>
                                                 </div>
                                             </div>

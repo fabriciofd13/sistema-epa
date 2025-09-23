@@ -88,6 +88,12 @@
                                             title="Actualizar Pago de Cooperadora" class="btn btn-primary">
                                             <i class="fas fa-money-bill"></i>
                                         </a>
+                                        {{-- 👉 Nuevo botón para imprimir PDF --}}
+                                        <a href="{{ route('alumnos.ficha.pdf', $alumno->id) }}" target="_blank"
+                                            {{-- abre en nueva pestaña para no perder la vista --}} class="btn btn-success" title="Imprimir ficha académica">
+                                            <i class="fas fa-print"></i>
+                                        </a>
+
                                     </td>
                                 </tr>
                             @endforeach

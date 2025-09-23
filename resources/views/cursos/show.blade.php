@@ -11,6 +11,11 @@
             <span class="badge bg-light border border-secondary"><strong>{{ $curso->anio_lectivo }}</strong></span>
         </h4>
         <div class="d-flex">
+            <a href="{{ route('cursos.asignar_preceptor', $curso->id) }}" title="Asignar Preceptor [Ctrl + Q]"
+                class="btn btn-outline-warning me-2">
+                <i class="fas fa-user-tie"></i> Asignar Preceptor
+                <span class="badge bg-light text-warning border border-warning ms-2">Ctrl + Q</span>
+            </a>
             <a href="{{ route('cursos.agregarAlumnos', $curso->id) }}" title="Agregar Alumnos [Ctrl + A]"
                 class="btn btn-outline-primary me-2">
                 <i class="fas fa-user-plus"></i> Agregar Alumnos
@@ -34,7 +39,9 @@
             @if ($curso->preceptor)
                 {{ $curso->preceptor->nombre . ' ' . $curso->preceptor->apellido }}
             @else
-                <span class="text-danger">Sin asignar</span>
+                <span class="text-danger">Sin asignar. </span><a
+                    href="{{ route('cursos.asignar_preceptor', $curso->id) }}">¿Desea asignar uno?
+                </a>
             @endif
         </h4>
 
@@ -104,6 +111,14 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>
         document.addEventListener('keydown', function(e) {
+            // Verifica si se presionó Ctrl + N (o Command + N en Mac)
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'q' || e.key === 'Q')) {
+                // Evita la acción por defecto (nueva ventana)
+                e.preventDefault();
+
+                // Redirecciona a la ruta de "Nuevo Alumno"
+                window.location.href = "{{ route('cursos.asignar_preceptor', $curso->id) }}";
+            }
             // Verifica si se presionó Ctrl + N (o Command + N en Mac)
             if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A')) {
                 // Evita la acción por defecto (nueva ventana)

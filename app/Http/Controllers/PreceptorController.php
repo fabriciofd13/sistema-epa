@@ -5,14 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Preceptor;
 use App\Http\Requests\StorePreceptorRequest;
 use App\Http\Requests\UpdatePreceptorRequest;
+use App\Models\Barrio;
+use App\Models\CursoDivision;
+use App\Models\Localidad;
 use Illuminate\Http\Request;
 
 class PreceptorController extends Controller
 {
-    /**
-     * Constructor del controlador.
-     * Aquí le indicamos que todos los métodos deben pasar por el middleware "auth".
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,79 +23,88 @@ class PreceptorController extends Controller
         return view('preceptors.index', compact('preceptors'));
     }
 
-    /**
-     * Muestra el formulario para crear un nuevo preceptor.
-     */
+
     public function create()
     {
-        return view('preceptors.create');
+        $localidades = Localidad::all();
+        $barrios = Barrio::all();
+        return view('preceptors.create', compact('localidades', 'barrios'));
     }
 
-    /**
-     * Almacena un nuevo preceptor en la base de datos.
-     */
     public function store(Request $request)
     {
-        // Ejemplo de validación rápida (podrías usar FormRequest)
         $request->validate([
             'apellido' => 'required|max:100',
             'nombre' => 'required|max:100',
-            'dni' => 'required|max:10|unique:preceptors,dni',
-            'cuil' => 'required|max:15|unique:preceptors,cuil',
             'fecha_nacimiento' => 'required|date',
-            // Agrega más validaciones según tus necesidades
         ]);
 
-        Preceptor::create($request->all());
+        $data = $request->all();
+        $data['create_user_id'] = auth()->id(); // usuario autenticado
+
+        Preceptor::create($data);
 
         return redirect()->route('preceptors.index')
             ->with('success', 'Preceptor creado exitosamente.');
     }
 
-    /**
-     * Muestra la información de un preceptor específico.
-     */
     public function show(Preceptor $preceptor)
     {
         return view('preceptors.show', compact('preceptor'));
     }
 
-    /**
-     * Muestra el formulario para editar un preceptor específico.
-     */
-    public function edit(Preceptor $preceptor)
+    public function edit($id)
     {
-        return view('preceptors.edit', compact('preceptor'));
+        $preceptor = Preceptor::findOrFail($id);
+        $barrios = Barrio::all(); // asumiendo que tenés modelos para estos
+        $localidades = Localidad::all();
+
+        return view('preceptors.edit', compact('preceptor', 'barrios', 'localidades'));
     }
 
-    /**
-     * Actualiza un preceptor en la base de datos.
-     */
-    public function update(Request $request, Preceptor $preceptor)
+    public function update(Request $request, $id)
     {
-        // Validar (puede ser similar a store, pero recuerda unique:<tabla>,<campo>,<ignoreId>)
+        $preceptor = Preceptor::findOrFail($id);
+
         $request->validate([
             'apellido' => 'required|max:100',
             'nombre' => 'required|max:100',
-            'dni' => 'required|max:10|unique:preceptors,dni,' . $preceptor->id,
-            'cuil' => 'required|max:15|unique:preceptors,cuil,' . $preceptor->id,
             'fecha_nacimiento' => 'required|date',
-            // Agrega más validaciones según tus necesidades
+            // más validaciones...
         ]);
 
-        $preceptor->update($request->all());
+        $data = $request->all();
+        $data['update_user_id'] = auth()->id();
 
-        return redirect()->route('preceptors.index')
-            ->with('success', 'Preceptor actualizado correctamente.');
+        $preceptor->update($data);
+
+        return redirect()->route('preceptors.index')->with('success', 'Preceptor actualizado exitosamente.');
     }
 
-    /**
-     * Elimina un preceptor de la base de datos.
-     */
-    public function destroy(Preceptor $preceptor)
+    public function destroy($id)
     {
+        $preceptor = Preceptor::findOrFail($id);
         $preceptor->delete();
-        return redirect()->route('preceptors.index')
-            ->with('success', 'Preceptor eliminado correctamente.');
+
+        return redirect()->route('preceptors.index')->with('success', 'Preceptor eliminado correctamente.');
+    }
+    public function cursosAsignados($id)
+    {
+        $preceptor = Preceptor::with('cursos')->findOrFail($id);
+        return view('preceptors.cursos', compact('preceptor'));
+    }
+    public function misCursos()
+    {
+        $user = Auth::user();
+
+        if (!$user->id_preceptor) {
+            abort(403, 'Este usuario no es preceptor.');
+        }
+
+        $cursos = CursoDivision::where('id_preceptor', $user->id_preceptor)
+            ->orderBy('anio_lectivo', 'desc')
+            ->get();
+
+        return view('preceptors.mis_cursos', compact('cursos'));
     }
 }

@@ -42,50 +42,53 @@
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label" for="nombre">Nombre</label>
-                                    <input type="text" name="nombre" id="nombre" class="form-control"
-                                        value="{{ old('nombre', $alumno->nombre) }}" required>
+                                    <input type="text" name="nombre" id="nombre" class="form-control" maxlength="100"
+                                        minlength="2" value="{{ old('nombre', $alumno->nombre) }}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="apellido">Apellido</label>
                                     <input type="text" name="apellido" id="apellido" class="form-control"
-                                        value="{{ old('apellido', $alumno->apellido) }}" required>
+                                        maxlength="100" minlength="2" value="{{ old('apellido', $alumno->apellido) }}"
+                                        required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="dni">DNI</label>
-                                    <input type="text" name="dni" id="dni" class="form-control"
-                                        value="{{ old('dni', $alumno->dni) }}" required>
+                                    <input type="text" name="dni" id="dni" class="form-control" maxlength="10"
+                                        minlength="2" value="{{ old('dni', $alumno->dni) }}" disabled>
+                                    <p class="alert alert-warning mt-2">Para editar el DNI contacte con el administrador</p>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="cuil">CUIL</label>
-                                    <input type="text" name="cuil" id="cuil" class="form-control"
-                                        value="{{ old('cuil', $alumno->cuil) }}" required>
+                                    <input type="text" name="cuil" id="cuil" maxlength="15" minlength="2"
+                                        class="form-control" value="{{ old('cuil', $alumno->cuil) }}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
+                                    <input type="date" min="01/01/1935" name="fecha_nacimiento" id="fecha_nacimiento"
+                                        class="form-control"
                                         value="{{ old('fecha_nacimiento', $alumno->fecha_nacimiento) }}" required>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="email">Email</label>
-                                    <input type="text" name="email" id="email" class="form-control"
-                                        value="{{ old('email', $alumno->email) }}">
+                                    <input type="text" name="email" minlength="4" maxlength="150" id="email"
+                                        class="form-control" value="{{ old('email', $alumno->email) }}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="celular">Celular</label>
-                                    <input type="text" name="celular" id="celular" class="form-control"
-                                        value="{{ old('celular', $alumno->celular) }}">
+                                    <input type="text" name="celular" minlength="4" maxlength="20" id="celular"
+                                        class="form-control" value="{{ old('celular', $alumno->celular) }}">
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label" for="telefono">Telefono/Otro Celular</label>
-                                    <input type="text" name="telefono" id="telefono" class="form-control"
-                                        value="{{ old('telefono', $alumno->telefono) }}">
+                                    <input type="text" name="telefono" minlength="4" maxlength="20" id="telefono"
+                                        class="form-control" value="{{ old('telefono', $alumno->telefono) }}">
                                 </div>
                             </div>
                         </div>
@@ -96,13 +99,14 @@
                         <hr>
                         <div class="mb-3">
                             <label class="form-label" for="nombre_tutor">Nombre de Tutor</label>
-                            <input type="text" name="nombre_tutor" id="nombre_tutor" class="form-control"
-                                value="{{ old('nombre_tutor', $alumno->nombre_tutor) }}" required>
+                            <input maxlength="100" minlength="2" type="text" name="nombre_tutor" id="nombre_tutor"
+                                class="form-control" value="{{ old('nombre_tutor', $alumno->nombre_tutor) }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="apellido_tutor">Apellido de Tutor</label>
-                            <input type="text" name="apellido_tutor" id="apellido_tutor" class="form-control"
+                            <input maxlength="100" minlength="2" type="text" name="apellido_tutor"
+                                id="apellido_tutor" class="form-control"
                                 value="{{ old('apellido_tutor', $alumno->apellido_tutor) }}" required>
                         </div>
 
@@ -142,20 +146,20 @@
 
                         <div class="mb-3">
                             <label class="form-label" for="dni_tutor">DNI Tutor</label>
-                            <input type="text" name="dni_tutor" id="dni_tutor" class="form-control"
-                                value="{{ old('dni_tutor', $alumno->dni_tutor) }}" required>
+                            <input maxlength="10" minlength="2" type="text" name="dni_tutor" id="dni_tutor"
+                                class="form-control" value="{{ old('dni_tutor', $alumno->dni_tutor) }}" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="cuil_tutor">CUIL Tutor</label>
-                            <input type="text" name="cuil_tutor" id="cuil_tutor" class="form-control"
-                                value="{{ old('cuil_tutor', $alumno->cuil_tutor) }}">
+                            <input maxlength="15" minlength="2" type="text" name="cuil_tutor" id="cuil_tutor"
+                                class="form-control" value="{{ old('cuil_tutor', $alumno->cuil_tutor) }}">
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label" for="celular_tutor">Celular Tutor</label>
-                            <input type="text" name="celular_tutor" id="celular_tutor" class="form-control"
-                                value="{{ old('celular_tutor', $alumno->celular_tutor) }}">
+                            <input type="text" maxlength="15" name="celular_tutor" id="celular_tutor"
+                                class="form-control" value="{{ old('celular_tutor', $alumno->celular_tutor) }}">
                         </div>
 
                         <h5>Domicilio</h5>
@@ -163,38 +167,50 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <label class="form-label" for="direccion">Dirección/Calle</label>
-                                <input type="text" name="direccion" maxlength="255" id="direccion"
+                                <input type="text" maxlength="255" name="direccion" maxlength="255" id="direccion"
                                     class="form-control" value="{{ old('direccion', $alumno->direccion) }}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label" for="numero">Nro</label>
-                                <input type="text" maxlength="10" name="numero" id="numero" class="form-control"
-                                    value="{{ old('numero', $alumno->numero) }}">
+                                <input maxlength="10" type="text" maxlength="10" name="numero" id="numero"
+                                    class="form-control" value="{{ old('numero', $alumno->numero) }}">
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="barrio">Barrio</label><br>
-                                <select name="barrio" id="barrio" class="form-control">
-                                    <option value="">Seleccione barrio</option>
-                                    @foreach ($barrios as $barrioItem)
-                                        <option value="{{ $barrioItem->barrio }}" @selected(old('barrio', $alumno->barrio) == $barrioItem->barrio)>
-                                            {{ $barrioItem->barrio }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                @if ($alumno->barrio)
+                                    <input type="text" name="barrio" id="barrio"
+                                        value="{{ old('barrio', $alumno->barrio) }}" maxlength="100"
+                                        class="form-control">
+                                @else
+                                    <select name="barrio" id="barrio" class="form-control">
+                                        <option value="">Seleccione barrio</option>
+                                        @foreach ($barrios as $barrioItem)
+                                            <option value="{{ $barrioItem->barrio }}" @selected(old('barrio', $alumno->barrio) == $barrioItem->barrio)>
+                                                {{ $barrioItem->barrio }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @endif
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label" for="localidad">Localidad</label><br>
-                                <select name="localidad" id="localidad" class="form-control">
-                                    <option value="">Seleccione localidad</option>
-                                    @foreach ($localidades as $localidadItem)
-                                        <option value="{{ $localidadItem->localidad }}" @selected(old('localidad', $alumno->localidad) == $localidadItem->localidad)>
-                                            {{ $localidadItem->localidad }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                @if ($alumno->localidad)
+                                    <input type="text" name="localidad" id="localidad"
+                                        value="{{ old('localidad', $alumno->localidad) }}" maxlength="255"
+                                        class="form-control">
+                                @else
+                                    <select name="localidad" id="localidad" class="form-control">
+                                        <option value="">Seleccione localidad</option>
+                                        @foreach ($localidades as $localidadItem)
+                                            <option value="{{ $localidadItem->localidad }}" @selected(old('localidad', $alumno->localidad) == $localidadItem->localidad)>
+                                                {{ $localidadItem->localidad }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -208,7 +224,7 @@
                         <hr>
                         <div class="mb-3">
                             <label class="form-label" for="primaria">Escuela Primaria</label>
-                            <input type="text" name="primaria" id="primaria" class="form-control"
+                            <input maxlength="255" type="text" name="primaria" id="primaria" class="form-control"
                                 value="{{ old('primaria', $alumno->primaria) }}">
                         </div>
                         <label class="form-label mb-0">Otros Datos</label>
@@ -223,7 +239,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label" for="observacion">Observaciones</label>
-                            <textarea class="form-control" name="observacion" id="observacion" cols="30" rows="8">{{ old('observacion', $alumno->observacion) }}</textarea>
+                            <textarea class="form-control" maxlength="500" name="observacion" id="observacion" cols="30" rows="8">{{ old('observacion', $alumno->observacion) }}</textarea>
                         </div>
                     </div>
 

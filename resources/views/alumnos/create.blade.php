@@ -102,20 +102,20 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="fecha_nacimiento">Fecha de Nacimiento</label>
-                                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
+                                    <input type="date" min="01/01/1935" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control"
                                         required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="email">Email</label>
-                                    <input type="text" name="email" id="email" maxlength="150" class="form-control">
+                                    <input type="text" name="email" id="email" minlength="4" maxlength="150" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="celular">Celular</label>
-                                    <input type="text" name="celular" id="celular" maxlength="20" class="form-control">
+                                    <input type="text" name="celular" id="celular" minlength="4" maxlength="20" class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="telefono">Telefono/Otro Celular</label>
-                                    <input type="text" name="telefono" id="telefono" maxlength="20" class="form-control">
+                                    <input type="text" name="telefono" id="telefono" minlength="4" maxlength="20" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -200,15 +200,6 @@
                     <div class="col-md-6">
                         <h5>Datos Académicos</h5>
                         <hr>
-                        {{-- <div class="mb-3">
-                        <label class="form-label" for="id_curso">Curso</label>
-                        <select name="id_curso" id="id_curso" class="form-control" required>
-                            <option value="">Seleccione curso</option>
-                            @foreach ($cursos as $curso)
-                                <option value="{{ $curso->id }}">{{ $curso->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
                         <div class="mb-3">
                             <label class="form-label" for="primaria">Escuela Primaria</label>
                             <input type="text" name="primaria" maxlength="255" id="primaria" class="form-control">

@@ -9,4 +9,10 @@ class Materia extends Model
 {
     /** @use HasFactory<\Database\Factories\MateriaFactory> */
     use HasFactory;
+    protected $guarded = [];
+    
+    public function notas()
+    {
+        return $this->hasMany(Nota::class, 'id_materia');
+    }
 }

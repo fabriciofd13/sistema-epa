@@ -17,8 +17,7 @@
                 <i class="fas fa-save"></i> Guardar
                 <span class="badge bg-light text-success border border-success ms-2">Ctrl + G</span>
             </button>
-            <a href="{{ route('historial.index', $alumno->id) }}"
-                class="btn btn-outline-secondary">
+            <a href="{{ route('historial.index', $alumno->id) }}" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i>
             </a>
         </div>
@@ -100,9 +99,9 @@
     <div class="container">
         <form id="notasForm"
             action="{{ route('historial.guardarNotas', ['alumno' => $alumno->id, 'id_historial' => $historial->id]) }}"
-            method="POST">
+            method="POST" autocomplete="off">
             @csrf
-            <div class="table-container">
+            <div class="table-responsive">
                 <table class="table table-bordered table-excel">
                     <thead>
                         <tr>
@@ -141,6 +140,12 @@
 @endsection
 
 @section('js')
+    <script>
+        console.log('Página de cargada correctamente');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script>
+    <script src="{{ asset('js/custom.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const inputs = Array.from(document.querySelectorAll(".nota-input"));

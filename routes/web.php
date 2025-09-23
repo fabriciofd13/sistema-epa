@@ -31,6 +31,11 @@ Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.
 // Editar rol de un usuario
 Route::get('/users/{user}/edit-rol', [UserController::class, 'editRol'])->name('users.editRol');
 Route::put('/users/{user}/update-rol', [UserController::class, 'updateRol'])->name('users.updateRol');
+// Mostrar formulario para vincular
+Route::get('/users/{user}/vincular-persona', [UserController::class, 'formVincularPersona'])->name('users.vincularPersona');
+// Guardar vinculación
+Route::post('/users/{user}/vincular-persona', [UserController::class, 'guardarVinculacion'])->name('users.guardarVinculacion');
+
 
 // Cambiar la contraseña de un usuario (por el Admin)
 Route::get('/users/{user}/change-password', [UserController::class, 'changeUserPasswordForm'])->name('users.changeUserPasswordForm');
@@ -42,15 +47,24 @@ Route::get('/profile/change-password', [UserController::class, 'changeOwnPasswor
 Route::post('/profile/change-password', [UserController::class, 'changeOwnPassword'])->name('users.changeOwnPassword');
 
 // Rutas para el módulo de Alumnos
-Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index'); // Ruta para mostrar la lista de alumnos
-Route::get('/alumnos/create', [AlumnoController::class, 'create'])->name('alumnos.create'); // Mostrar formulario
-Route::post('/alumnos', [AlumnoController::class, 'store'])->name('alumnos.store'); // Guardar alumno en la base de datos
-Route::get('/alumnos/{id}/edit', [AlumnoController::class, 'edit'])->name('alumnos.edit'); // Ruta para mostrar el formulario de edición
-Route::put('/alumnos/{id}', [AlumnoController::class, 'update'])->name('alumnos.update'); // Ruta para actualizar los datos del alumno
+// Rutas para el módulo de Alumnos
+Route::get('/alumnos', [AlumnoController::class, 'index'])->name('alumnos.index');
+Route::get('/alumnos/create', [AlumnoController::class, 'create'])->name('alumnos.create');
+Route::post('/alumnos', [AlumnoController::class, 'store'])->name('alumnos.store');
+
+// 👇 Nueva ruta show (ver ficha)
+Route::get('/alumnos/{id}', [AlumnoController::class, 'show'])->name('alumnos.show');
+
+Route::get('/alumnos/{id}/edit', [AlumnoController::class, 'edit'])->name('alumnos.edit');
+Route::put('/alumnos/{id}', [AlumnoController::class, 'update'])->name('alumnos.update');
+
 Route::get('/alumnos/{id}/notas', [AlumnoController::class, 'verNotas'])->name('alumnos.notas');
 Route::get('/alumnos/{id}/notas-editar', [AlumnoController::class, 'verNotasEditables'])->name('alumnos.notas.editar');
 Route::post('/alumnos/{id}/notas-guardar', [AlumnoController::class, 'guardarNotas'])->name('alumnos.notas.guardar');
-Route::get('/alumnos/check-dni', [AlumnoController::class, 'checkDni'])->name('alumnos.check.dni'); // Ruta para verificar si existe un DNI repetido
+
+Route::get('/alumnos/check-dni', [AlumnoController::class, 'checkDni'])->name('alumnos.check.dni');
+Route::get('/buscar-alumnos', [AlumnoController::class, 'buscar'])->name('alumnos.buscar');
+
 
 
 
@@ -61,6 +75,11 @@ Route::get('/cursos/{id}/agregar-alumnos', [CursoDivisionController::class, 'get
     ->name('cursos.agregarAlumnos');
 Route::post('/cursos/{id}/agregar-alumnos', [CursoDivisionController::class, 'agregarAlumnosCurso'])
     ->name('cursos.guardarAlumnos');
+Route::get('curso-division/{id}/asignar-preceptor', [CursoDivisionController::class, 'asignarPreceptorForm'])->name('cursos.asignar_preceptor');
+Route::post('curso-division/{id}/asignar-preceptor', [CursoDivisionController::class, 'asignarPreceptor'])->name('cursos.guardar_preceptor');
+Route::get('/preceptor/mis-cursos', [CursoDivisionController::class, 'misCursos'])->name('preceptor.cursos');
+
+
 
 //Rutas para el módulo Notas
 Route::get('/notas/carga/{curso_id}/{etapa}', [NotaController::class, 'cargaEtapa'])->name('notas.carga_etapa');
@@ -69,6 +88,12 @@ Route::get('/notas', [NotaController::class, 'index'])->name('notas.index');
 Route::get('/notas/curso/{id}', [NotaController::class, 'show'])->name('notas.show');
 Route::get('/notas/curso/{curso_id}/materia/{materia_id}', [NotaController::class, 'ingresar'])->name('notas.ingresar');
 Route::post('/notas/guardar', [NotaController::class, 'store'])->name('notas.store');
+Route::get('/notas/{curso_id}/materia/{materia_id}/resumen', [NotaController::class, 'resumen'])
+    ->name('notas.resumen');
+    Route::get('/notas/curso/{curso_id}/graficos-trimestre', [NotaController::class, 'graficosTrimestre'])->name('notas.graficos_trimestre');
+
+
+
 
 // Historia Académica
 Route::prefix('historial')->group(function () {
@@ -84,11 +109,15 @@ Route::prefix('historial')->group(function () {
     Route::delete('/historial/{historial}', [HistorialAcademicoController::class, 'destroy'])
         ->name('historial.destroy');
 });
-
+//PDF
+Route::get('alumnos/{id}/ficha-academica', [AlumnoController::class, 'pdfFichaAcademica'])
+    ->name('alumnos.ficha.pdf')
+    ->middleware('auth');
 //Preceptores
 Route::resource('preceptors', PreceptorController::class);
-//
-//Docentes
+Route::get('preceptors/{id}/cursos-asignados', [PreceptorController::class, 'cursosAsignados'])->name('preceptors.cursos');
+
+// Docentes
 Route::resource('docentes', DocenteController::class);
 //
 //Materias

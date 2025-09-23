@@ -49,4 +49,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function preceptor()
+    {
+        return $this->belongsTo(Preceptor::class, 'id_preceptor','id');
+    }
 }

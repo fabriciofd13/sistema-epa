@@ -17,7 +17,7 @@
     <div class="container">
         <div class="card p-4">
             @if (session('success'))
-                <div style="color: green;">
+                <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
@@ -46,21 +46,33 @@
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->rol }}</td>
                                     <td>
-                                        <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}">Editar</a> |
-                                        <a class="btn btn-warning"
-                                            href="{{ route('users.changeUserPasswordForm', $user->id) }}">Cambiar
-                                            Contraseña</a>
-
-                                        {{-- Botón para eliminar --}}
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-danger" type="submit"
-                                                onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">
-                                                Eliminar
-                                            </button>
-                                        </form>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <a class="btn btn-primary" href="{{ route('users.edit', $user->id) }}"
+                                                    title="Editar Usuario"><i class="fas fa-edit"></i></a>
+                                                <a class="btn btn-warning"
+                                                    href="{{ route('users.changeUserPasswordForm', $user->id) }}"
+                                                    title="Cambiar Contraseña"><i class="fas fa-lock"></i></a>
+                                                    <a title="Vincular Persona" href="{{ route('users.vincularPersona', $user->id) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-link"></i>                                                     </a>
+                                                |
+                                                {{-- Botón para eliminar --}}
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger" title="Eliminar" type="submit"
+                                                        onclick="return confirm('¿Seguro que deseas eliminar este usuario?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                            
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

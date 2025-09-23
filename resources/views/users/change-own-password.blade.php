@@ -38,17 +38,19 @@
 
                 <div>
                     <label class="form-label">Contraseña actual:</label>
-                    <input class="form-control" type="password" name="current_password" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="current_password" required />
+                    
                 </div>
 
                 <div>
                     <label class="form-label">Nueva contraseña:</label>
-                    <input class="form-control" type="password" name="new_password" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="new_password" required />
+                    <p>* Longitud Minima 6 caracteres</p>
                 </div>
 
                 <div>
                     <label class="form-label">Confirmar nueva contraseña:</label>
-                    <input class="form-control" type="password" name="new_password_confirmation" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="new_password_confirmation" required />                    
                 </div>
 
                 <button class="btn btn-primary mt-3" type="submit">Cambiar Contraseña</button>

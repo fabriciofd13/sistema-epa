@@ -50,9 +50,26 @@ class HistorialAcademicoController extends Controller
      */
     public function registrar($id)
     {
-        $alumno = Alumno::findOrFail($id);
+        $user = auth()->user();
+
+        // Si el usuario es administrativo, tiene acceso total
+        if ($user->rol !== 'Administrativo') {
+            $alumno = Alumno::findOrFail($id);
+            $cursos = CursoDivision::orderBy('anio_lectivo', 'desc')->get();
+            return view('historial.registrar', compact('alumno', 'cursos'));
+            // Si es preceptor, verificamos que el curso le pertenezca
+            if ($user->rol === 'Preceptor' && $user->id_preceptor !== $curso->id_preceptor) {
+                abort(403, 'No tenés permiso para modificar notas de este curso.');
+            }
+
+            // Otros roles no pueden acceder
+            if (!in_array($user->rol, ['Preceptor', 'Administrativo'])) {
+                abort(403, 'No tenés permiso para acceder a esta sección.');
+            }
+        }
+        /* $alumno = Alumno::findOrFail($id);
         $cursos = CursoDivision::orderBy('anio_lectivo', 'desc')->get();
-        return view('historial.registrar', compact('alumno', 'cursos'));
+        return view('historial.registrar', compact('alumno', 'cursos')); */
     }
 
     /**
@@ -106,8 +123,36 @@ class HistorialAcademicoController extends Controller
         return redirect()->route('historial.index', $alumno->id)->with('success', 'Notas guardadas correctamente.');
     }
 
-    public function cargarNotas($id_alumno, $id_historial)
+    /* public function cargarNotas($id_alumno, $id_historial)
     {
+        $user = auth()->user();
+
+        // Si el usuario es administrativo, tiene acceso total
+        if ($user->rol !== 'Administrativo') {
+            $alumno = Alumno::findOrFail($id_alumno);
+            $historial = HistorialAcademico::findOrFail($id_historial);
+
+            // Obtener el curso al que pertenece el historial
+            $curso = CursoDivision::findOrFail($historial->id_curso);
+
+            // Filtrar las materias según el año del curso
+            $materias = Materia::where('anio', $curso->anio)->get();
+
+            // Obtener notas del historial académico del alumno
+            $notas = Nota::where('id_historial_academico', $historial->id)->get()->keyBy('id_materia');
+
+            return view('historial.cargar', compact('alumno', 'curso', 'materias', 'notas', 'historial'));
+            // Si es preceptor, verificamos que el curso le pertenezca
+            if ($user->rol === 'Preceptor' && $user->id_preceptor !== $curso->id_preceptor) {
+                abort(403, 'No tenés permiso para modificar notas de este curso.');
+            }
+
+            // Otros roles no pueden acceder
+            if (!in_array($user->rol, ['Preceptor', 'Administrativo'])) {
+                abort(403, 'No tenés permiso para acceder a esta sección.');
+            }
+        }
+
         $alumno = Alumno::findOrFail($id_alumno);
         $historial = HistorialAcademico::findOrFail($id_historial);
 
@@ -121,7 +166,35 @@ class HistorialAcademicoController extends Controller
         $notas = Nota::where('id_historial_academico', $historial->id)->get()->keyBy('id_materia');
 
         return view('historial.cargar', compact('alumno', 'curso', 'materias', 'notas', 'historial'));
+    } */
+
+    public function cargarNotas($id_alumno, $id_historial)
+{
+    $user = auth()->user();
+
+    $alumno = Alumno::findOrFail($id_alumno);
+    $historial = HistorialAcademico::with('curso')->findOrFail($id_historial);
+    $curso = $historial->curso;
+
+    // Verificamos permisos de acceso
+    if (!in_array($user->rol, ['Administrativo', 'Admin'])) {
+        if ($user->rol === 'Preceptor') {
+            if ($user->id_preceptor !== $curso->id_preceptor) {
+                abort(403, 'No tenés permiso para acceder a este curso.');
+            }
+        } else {
+            abort(403, 'No tenés permiso para acceder a esta sección.');
+        }
     }
+
+    // Filtrar materias por año del curso
+    $materias = Materia::where('anio', $curso->anio)->get();
+
+    // Obtener notas del historial académico del alumno
+    $notas = Nota::where('id_historial_academico', $historial->id)->get()->keyBy('id_materia');
+
+    return view('historial.cargar', compact('alumno', 'curso', 'materias', 'notas', 'historial'));
+}
     public function editarCooperadora($alumnoId)
     {
         // Obtén al alumno

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Docente;
+use App\Models\Preceptor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -125,5 +127,47 @@ class UserController extends Controller
         $user->save();
 
         return back()->with('success', '¡Tu contraseña ha sido cambiada!');
+    }
+
+    public function formVincularPersona($id)
+    {
+        $user = User::findOrFail($id);
+        $preceptores = Preceptor::orderBy('apellido')->get();
+        $docentes = Docente::orderBy('apellido')->get();
+        // etc...
+
+        return view('users.vincular_persona', compact('user', 'preceptores', 'docentes'));
+    }
+
+    public function guardarVinculacion(Request $request, $id)
+    {
+        $request->validate([
+            'tipo' => 'required|in:preceptor,docente,administrativo',
+            'persona_id' => 'required|integer',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        // Limpiar vínculos anteriores
+        $user->id_preceptor = null;
+        $user->id_docente = null;
+        $user->id_administrativo = null;
+
+        // Asignar el nuevo vínculo
+        switch ($request->tipo) {
+            case 'preceptor':
+                $user->id_preceptor = $request->persona_id;
+                break;
+            case 'docente':
+                $user->id_docente = $request->persona_id;
+                break;
+            case 'administrativo':
+                $user->id_administrativo = $request->persona_id;
+                break;
+        }
+
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'Persona vinculada correctamente al usuario.');
     }
 }

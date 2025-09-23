@@ -39,4 +39,8 @@ class Alumno extends Model
     {
         return $this->hasManyThrough(Nota::class, HistorialAcademico::class, 'id_alumno', 'id_historial_academico', 'id', 'id');
     }
+    public function historiales()
+    {
+        return $this->hasMany(HistorialAcademico::class, 'id_alumno', 'id');
+    }
 }

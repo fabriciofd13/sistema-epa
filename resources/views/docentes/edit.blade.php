@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar Preceptor')
+@section('title', 'Editar Docente')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
         style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <h4 class="m-0 pl-2" style="color: gray">
-            <span class="badge bg-light border border-secondary"><strong>Editar Preceptor</strong></span>
+            <span class="badge bg-light border border-secondary"><strong>Editar Docente</strong></span>
         </h4>
         <div class="d-flex">
-            <a href="{{ route('preceptors.index') }}" title="Volver" class="btn btn-outline-secondary">
+            <a href="{{ route('docentes.index') }}" title="Volver" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left"></i>
             </a>
         </div>
@@ -29,14 +29,15 @@
                 </div>
             @endif
 
-            <form action="{{ route('preceptors.update', $preceptor->id) }}" method="POST">
+            <form action="{{ route('docentes.update', $docente->id) }}" method="POST">
                 @csrf
                 @method('PUT')
+
                 <div class="row">
                     <div class="col-md-6">
                         <h5>Datos Personales</h5>
                         <hr>
-                        @include('preceptors.partials.form-fields', ['preceptor' => $preceptor])
+                        @include('docentes.partials.form-fields', ['docente' => $docente])
                     </div>
 
                     <div class="col-md-6">
@@ -47,14 +48,14 @@
                                 <div class="mb-3">
                                     <label class="form-label">Dirección/Calle:</label>
                                     <input type="text" class="form-control" name="direccion"
-                                        value="{{ old('direccion', $preceptor->direccion) }}">
+                                        value="{{ old('direccion', $docente->direccion) }}">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Número:</label>
                                     <input type="text" class="form-control" name="numero"
-                                        value="{{ old('numero', $preceptor->numero) }}">
+                                        value="{{ old('numero', $docente->numero) }}">
                                 </div>
                             </div>
                         </div>
@@ -64,7 +65,7 @@
                             <select name="barrio" class="form-control">
                                 <option value="">Seleccione barrio</option>
                                 @foreach ($barrios as $barrio)
-                                    <option value="{{ $barrio->barrio }}" {{ old('barrio', $preceptor->barrio) == $barrio->barrio ? 'selected' : '' }}>
+                                    <option value="{{ $barrio->barrio }}" {{ old('barrio', $docente->barrio) == $barrio->barrio ? 'selected' : '' }}>
                                         {{ $barrio->barrio }}
                                     </option>
                                 @endforeach
@@ -76,7 +77,7 @@
                             <select name="localidad" class="form-control">
                                 <option value="">Seleccione localidad</option>
                                 @foreach ($localidades as $localidad)
-                                    <option value="{{ $localidad->localidad }}" {{ old('localidad', $preceptor->localidad) == $localidad->localidad ? 'selected' : '' }}>
+                                    <option value="{{ $localidad->localidad }}" {{ old('localidad', $docente->localidad) == $localidad->localidad ? 'selected' : '' }}>
                                         {{ $localidad->localidad }}
                                     </option>
                                 @endforeach
@@ -85,7 +86,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Observaciones:</label>
-                            <textarea name="observaciones" class="form-control">{{ old('observaciones', $preceptor->observaciones) }}</textarea>
+                            <textarea name="observaciones" class="form-control">{{ old('observaciones', $docente->observaciones) }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -93,7 +94,7 @@
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-primary">Actualizar</button>
-                        <a href="{{ route('preceptors.index') }}" class="btn btn-secondary">Cancelar</a>
+                        <a href="{{ route('docentes.index') }}" class="btn btn-secondary">Cancelar</a>
                     </div>
                 </div>
             </form>
@@ -109,7 +110,7 @@
 
 @section('js')
     <script>
-        console.log('Página de edición de preceptor cargada');
+        console.log('Página de edición de docente cargada');
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

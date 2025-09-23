@@ -28,7 +28,7 @@
 
                 <div class="mb-3">
                     <label for="pago_cooperadora" class="form-label">Pago Cooperadora</label>
-                    <input type="number" name="pago_cooperadora" class="form-control" min="0" max="50000"
+                    <input type="number" name="pago_cooperadora" class="form-control" min="0" max="50000" maxlength="6"
                         value="{{ old('pago_cooperadora', $historial->pago_cooperadora) }}" required>
                 </div>
 

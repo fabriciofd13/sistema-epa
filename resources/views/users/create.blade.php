@@ -28,17 +28,17 @@
                 @csrf
                 <div>
                     <label class="form-label">Nombre:</label>
-                    <input class="form-control" type="text" name="name" value="{{ old('name') }}" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="text" name="name" value="{{ old('name') }}" required />
                 </div>
 
                 <div>
                     <label class="form-label">Email:</label>
-                    <input class="form-control" type="email" name="email" value="{{ old('email') }}" required />
+                    <input class="form-control" minlength="4" maxlength="255" type="email" name="email" value="{{ old('email') }}" required />
                 </div>
 
                 <div>
                     <label class="form-label">Contraseña:</label>
-                    <input class="form-control" type="password" name="password" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="password" required />
                 </div>
 
                 <div>
@@ -47,10 +47,13 @@
                         <option value="">-- Seleccione Rol --</option>
                         <option value="Admin">Admin</option>
                         <option value="Docente">Docente</option>
+                        <option value="Docente Integrador">Docente Integrador</option>
                         <option value="Padre">Padre</option>
                         <option value="Alumno">Alumno</option>
                         <option value="Administrativo">Administrativo</option>
                         <option value="Preceptor">Preceptor</option>
+                        <option value="Equipo Directivo">Equipo Directivo</option>
+                        <option value="Asesor Pedagógico">Asesor Pedagógico</option>
                     </select>
                 </div>
 

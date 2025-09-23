@@ -20,4 +20,9 @@ class Nota extends Model
     {
         return $this->belongsTo(Materia::class, 'id_materia', 'id');
     }
+    public function historial()
+    {
+        return $this->belongsTo(HistorialAcademico::class, 'id_historial_academico', 'id');
+    }
+
 }

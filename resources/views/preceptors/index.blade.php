@@ -9,6 +9,9 @@
             <span class="badge bg-light border border-secondary"><strong>Preceptores</strong></span>
         </h4>
         <div class="d-flex">
+            <a href="{{ route('preceptors.create') }}" title="Agregar Preceptor" class="btn btn-outline-primary me-2">
+                <i class="fas fa-user-tie"></i> Nuevo Preceptor
+            </a>
             <a href="{{ route('home') }}" title="Volver" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i>
             </a>
@@ -20,53 +23,57 @@
     <div class="container text-center">
         <div class="card p-5">
             @if (session('success'))
-                <div style="color: green;">
+                <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
-
-            <a href="{{ route('preceptors.create') }}">Crear nuevo Preceptor</a>
             <div class="table-responsive">
-                <table border="1" cellpadding="8" cellspacing="0">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Apellido</th>
                             <th>Nombre</th>
                             <th>DNI</th>
                             <th>CUIL</th>
-                            <th>Fecha Nacimiento</th>
+                            <th>Teléfono</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($preceptors as $preceptor)
+                        @if (count($preceptors) > 0)
+                            @foreach ($preceptors as $preceptor)
+                                <tr>
+                                    <td>{{ $preceptor->apellido }}</td>
+                                    <td>{{ $preceptor->nombre }}</td>
+                                    <td>{{ $preceptor->dni }}</td>
+                                    <td>{{ $preceptor->cuil }}</td>
+                                    <td>{{ $preceptor->telefono }}</td>
+                                    <td>
+                                        <a href="{{ route('preceptors.cursos', $preceptor->id) }}"
+                                            class="btn btn-info btn-sm">
+                                            Ver Cursos
+                                        </a>
+                                        <a href="{{ route('preceptors.edit', $preceptor->id) }}"
+                                            class="btn btn-primary btn-sm">Editar</a>
+                                        <form id="form-delete-{{ $preceptor->id }}"
+                                            action="{{ route('preceptors.destroy', $preceptor->id) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                onclick="confirmDelete({{ $preceptor->id }})">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr>
-                                <td>{{ $preceptor->id }}</td>
-                                <td>{{ $preceptor->apellido }}</td>
-                                <td>{{ $preceptor->nombre }}</td>
-                                <td>{{ $preceptor->dni }}</td>
-                                <td>{{ $preceptor->cuil }}</td>
-                                <td>{{ $preceptor->fecha_nacimiento }}</td>
-                                <td>
-                                    <a href="{{ route('preceptors.show', $preceptor) }}">Ver</a>
-                                    <a href="{{ route('preceptors.edit', $preceptor) }}">Editar</a>
-                                    <form action="{{ route('preceptors.destroy', $preceptor) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            onclick="return confirm('¿Estás seguro de eliminar este preceptor?')">
-                                            Eliminar
-                                        </button>
-                                    </form>
+                                <td colspan="6">
+                                    <p>Aún no hay preceptores agregados, <a href="{{ route('preceptors.create') }}">¿desea
+                                            agregar uno?</a></p>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="7">No hay registros de preceptores.</td>
-                            </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -82,6 +89,27 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción no se puede deshacer.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('form-delete-' + id).submit();
+                }
+            })
+        }
+    </script>
+
     <script>
         console.log('Página en construcción cargada');
     </script>

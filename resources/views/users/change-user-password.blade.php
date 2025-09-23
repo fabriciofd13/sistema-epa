@@ -38,12 +38,12 @@
 
                 <div>
                     <label class="form-label">Nueva Contraseña:</label>
-                    <input class="form-control" type="password" name="password" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="password" required />
                 </div>
 
                 <div>
                     <label class="form-label">Confirmar Contraseña:</label>
-                    <input class="form-control" type="password" name="password_confirmation" required />
+                    <input class="form-control" minlength="6" maxlength="255" type="password" name="password_confirmation" required />
                 </div>
 
                 <button class="btn btn-primary mt-3" type="submit">Actualizar Contraseña</button>

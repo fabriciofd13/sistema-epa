@@ -7,6 +7,7 @@ use App\Http\Requests\StoreNotaRequest;
 use App\Http\Requests\UpdateNotaRequest;
 use App\Models\Alumno;
 use App\Models\CursoDivision;
+use App\Models\HistorialAcademico;
 use App\Models\Materia;
 use Illuminate\Http\Request;
 
@@ -22,8 +23,11 @@ class NotaController extends Controller
     }
     public function index()
     {
-        $cursos = CursoDivision::all();
-        return view('notas.index', compact('cursos'));
+        $cursos = CursoDivision::orderBy('id', 'asc')->get();
+
+        $cursosPorAnio = $cursos->groupBy('anio_lectivo');
+
+        return view('notas.index', compact('cursosPorAnio'));
     }
 
     public function show($id)
@@ -35,23 +39,30 @@ class NotaController extends Controller
 
     public function ingresar($curso_id, $materia_id)
     {
-        $materia = Materia::findOrFail($materia_id);
+        // Buscar el curso
         $curso = CursoDivision::findOrFail($curso_id);
-        $alumnos = Alumno::where('id_curso', $curso_id)
-            ->with(['notas' => function ($query) use ($materia_id) {
+
+        // Buscar la materia
+        $materia = Materia::findOrFail($materia_id);
+
+        // Buscar todos los historiales académicos de ese curso y año lectivo
+        $historiales = HistorialAcademico::where('id_curso', $curso->id)
+            ->where('anio_lectivo', $curso->anio_lectivo)
+            ->with(['alumno', 'notas' => function ($query) use ($materia_id) {
                 $query->where('id_materia', $materia_id);
             }])
-            ->orderBy('apellido')
-            ->orderBy('nombre')
             ->get();
 
-        return view('notas.ingresar', compact('alumnos', 'materia_id', 'materia', 'curso'));
+        return view('notas.ingresar', compact('historiales', 'materia_id', 'materia', 'curso'));
     }
     public function store(Request $request)
     {
-        foreach ($request->notas as $alumno_id => $notas) {
+        foreach ($request->notas as $historial_id => $notas) {
             Nota::updateOrCreate(
-                ['id_alumno' => $alumno_id, 'id_materia' => $request->id_materia],
+                [
+                    'id_historial_academico' => $historial_id,
+                    'id_materia' => $request->id_materia
+                ],
                 [
                     'primer_trimestre' => $notas['primer_trimestre'] ?? null,
                     'segundo_trimestre' => $notas['segundo_trimestre'] ?? null,
@@ -60,39 +71,59 @@ class NotaController extends Controller
                     'nota_diciembre' => $notas['nota_diciembre'] ?? null,
                     'nota_febrero' => $notas['nota_febrero'] ?? null,
                     'previa' => $notas['previa'] ?? null,
+                    'definitiva' => $notas['definitiva'] ?? null,
                     'create_user_id' => auth()->id(),
                     'update_user_id' => auth()->id(),
                 ]
             );
         }
+
         return redirect()->route('notas.ingresar', [
             'curso_id' => $request->id_curso,
             'materia_id' => $request->id_materia
         ])->with('success', 'Notas guardadas correctamente.');
     }
+
     public function cargaEtapa($curso_id, $etapa)
     {
         $curso = CursoDivision::findOrFail($curso_id);
-        $alumnos = Alumno::where('id_curso', $curso_id)->orderBy('apellido')->get();
+
+        // Obtener alumnos inscriptos en ese curso y año lectivo
+        $historiales = HistorialAcademico::where('id_curso', $curso_id)
+            ->where('anio_lectivo', $curso->anio_lectivo)
+            ->with('alumno')
+            ->get();
+
+        $alumnos = $historiales->pluck('alumno');
         $materias = Materia::where('anio', $curso->anio)->get();
 
-        // Obtener notas existentes
-        $notas = Nota::whereIn('id_alumno', $alumnos->pluck('id'))
+        // Obtener las notas existentes
+        $notas = Nota::whereIn('id_historial_academico', $historiales->pluck('id'))
             ->whereIn('id_materia', $materias->pluck('id'))
             ->get()
             ->keyBy(function ($nota) {
-                return $nota->id_alumno . '-' . $nota->id_materia;
+                return $nota->id_historial_academico . '-' . $nota->id_materia;
             });
 
-        return view('notas.cargar_etapa', compact('curso', 'alumnos', 'materias', 'notas', 'etapa'));
+        return view('notas.cargar_etapa', compact('curso', 'alumnos', 'materias', 'notas', 'etapa', 'historiales'));
     }
+
     public function guardarEtapa(Request $request, $curso_id, $etapa)
     {
-        foreach ($request->notas as $alumno_id => $materia_notas) {
+        foreach ($request->notas as $historial_id => $materia_notas) {
             foreach ($materia_notas as $materia_id => $nota) {
                 Nota::updateOrCreate(
-                    ['id_alumno' => $alumno_id, 'id_materia' => $materia_id],
-                    [$etapa => $nota]
+                    [
+                        'id_historial_academico' => $historial_id,
+                        'id_materia' => $materia_id
+                    ],
+                    [
+                        $etapa => ($nota === null || $nota === '') ? null : $nota,
+                        'update_user_id' => auth()->id(),
+                        'create_user_id' => Nota::where('id_historial_academico', $historial_id)
+                            ->where('id_materia', $materia_id)
+                            ->exists() ? null : auth()->id()
+                    ]
                 );
             }
         }
@@ -100,4 +131,107 @@ class NotaController extends Controller
         return redirect()->route('notas.carga_etapa', ['curso_id' => $curso_id, 'etapa' => $etapa])
             ->with('success', 'Notas actualizadas correctamente.');
     }
+
+    public function resumen($curso_id, $materia_id)
+    {
+        $curso = CursoDivision::findOrFail($curso_id);
+        $materia = Materia::findOrFail($materia_id);
+
+        // Buscar historiales de ese curso y año lectivo
+        $historiales = HistorialAcademico::where('id_curso', $curso->id)
+            ->where('anio_lectivo', $curso->anio_lectivo)
+            ->get();
+
+        // IDs de historiales
+        $historialIds = $historiales->pluck('id');
+
+        // Traer todas las notas de esa materia en los historiales
+        $notas = Nota::whereIn('id_historial_academico', $historialIds)
+            ->where('id_materia', $materia_id)
+            ->get();
+
+        // Inicializar datos
+        $estadisticas = [
+            'primer_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'segundo_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            't ercer_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_final' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_diciembre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_febrero' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+        ];
+
+        foreach ($notas as $nota) {
+            foreach (['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'] as $trimestre) {
+                $valor = $nota->$trimestre;
+
+                if (!is_null($valor)) {
+                    $estadisticas[$trimestre]['total']++;
+
+                    if (in_array($valor, [1, 2, 3])) {
+                        $estadisticas[$trimestre]['aplazados']++;
+                    } elseif (in_array($valor, [4, 5])) {
+                        $estadisticas[$trimestre]['desaprobados']++;
+                    } elseif ($valor >= 6) {
+                        $estadisticas[$trimestre]['aprobados']++;
+                    }
+                }
+            }
+        }
+
+        return view('notas.resumen', [
+            'curso' => $curso,
+            'materia' => $materia,
+            'resumen' => $estadisticas
+        ]);
+    }
+    public function graficosTrimestre($curso_id)
+{
+    $curso = CursoDivision::findOrFail($curso_id);
+    $materias = Materia::where('anio', $curso->anio)->get();
+
+    $historiales = HistorialAcademico::where('id_curso', $curso->id)
+        ->where('anio_lectivo', $curso->anio_lectivo)
+        ->get();
+
+    $historialIds = $historiales->pluck('id');
+
+    $datos = [
+        'primer_trimestre' => ['materias' => []],
+        'segundo_trimestre' => ['materias' => []],
+        'tercer_trimestre' => ['materias' => []],
+    ];
+
+    foreach ($materias as $materia) {
+        $notas = Nota::whereIn('id_historial_academico', $historialIds)
+            ->where('id_materia', $materia->id)
+            ->get();
+
+        foreach (['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'] as $etapa) {
+            $resumen = [
+                'nombre' => $materia->nombre,
+                'aprobados' => 0,
+                'desaprobados' => 0,
+                'aplazados' => 0
+            ];
+
+            foreach ($notas as $nota) {
+                $valor = $nota->$etapa;
+                if (!is_null($valor)) {
+                    if ($valor >= 6) {
+                        $resumen['aprobados']++;
+                    } elseif (in_array($valor, [4, 5])) {
+                        $resumen['desaprobados']++;
+                    } elseif (in_array($valor, [1, 2, 3])) {
+                        $resumen['aplazados']++;
+                    }
+                }
+            }
+
+            $datos[$etapa]['materias'][] = $resumen;
+        }
+    }
+
+    return view('notas.graficos_trimestre', compact('curso', 'datos'));
+}
+
 }
