@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Planillas de Notas por Curso')
+@section('title', 'Planillas de Notas por Curso | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Editar Cooperadora para ' . $alumno->nombre . ' ' . $alumno->apellido)
+@section('title', 'Editar Cooperadora para ' . $alumno->nombre . ' ' . $alumno->apellido . ' | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
@@ -28,8 +28,8 @@
 
                 <div class="mb-3">
                     <label for="pago_cooperadora" class="form-label">Pago Cooperadora</label>
-                    <input type="number" name="pago_cooperadora" class="form-control" min="0" max="50000" maxlength="6"
-                        value="{{ old('pago_cooperadora', $historial->pago_cooperadora) }}" required>
+                    <input type="number" name="pago_cooperadora" class="form-control" min="0" max="50000"
+                        maxlength="6" value="{{ old('pago_cooperadora', $historial->pago_cooperadora) }}" required>
                 </div>
 
                 <button type="submit" class="btn btn-success">Guardar</button>

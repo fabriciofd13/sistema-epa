@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Página en Construcción')
+@section('title', 'Página en Construcción | REGLA')
 
 @section('content_header')
-<div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
+    <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
         style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <h4 class="m-0 pl-2" style="color: gray">
-            <span class="badge bg-light border border-secondary"><strong>Lista de Docentes</strong></span>            
+            <span class="badge bg-light border border-secondary"><strong>Lista de Docentes</strong></span>
         </h4>
         <div class="d-flex">
             <a href="{{ route('home') }}" title="Volver" class="btn btn-outline-secondary">
@@ -23,11 +23,8 @@
             <p class="mt-3">
                 ¡Vuelve más tarde para ver las nuevas funciones!
             </p>
-            <img 
-                src="https://cdn-icons-png.flaticon.com/512/2452/2452304.png" 
-                alt="En Construcción"
-                style="max-width: 200px;"
-            />
+            <img src="https://cdn-icons-png.flaticon.com/512/2452/2452304.png" alt="En Construcción"
+                style="max-width: 200px;" />
         </div>
         @include('partials.footer')
     </div>
@@ -46,4 +43,3 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 @endsection
-

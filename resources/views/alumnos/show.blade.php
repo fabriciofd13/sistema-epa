@@ -1,30 +1,7 @@
 @extends('adminlte::page')
 
-@section('title', 'Ficha del Alumno')
+@section('title', 'Ficha del Alumno | REGLA')
 
-{{-- @section('content_header')
-    <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
-        style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        <h4 class="m-0 pl-2" style="color: gray">
-            <span class="badge bg-light border border-secondary">
-                <strong>Ficha del Alumno</strong>
-            </span>
-        </h4>
-        <div class="d-flex">
-            <a href="{{ route('alumnos.index') }}" title="Lista de Alumnos" class="btn btn-outline-primary me-2">
-                <i class="fas fa-list"></i> Lista de Alumnos
-            </a>
-            <a href="{{ route('home') }}" title="Volver" class="btn btn-outline-secondary me-2">
-                <i class="fas fa-times"></i>
-            </a>
-            @can('alumnos.edit')
-                <a href="{{ route('alumnos.edit', $alumno->id) }}" class="btn btn-outline-warning me-2">
-                    <i class="fas fa-edit"></i> Editar
-                </a>
-            @endcan
-        </div>
-    </div>
-@endsection --}}
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
         style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">

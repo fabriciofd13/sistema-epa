@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Registrar Inscripción para ' . $alumno->nombre . ' ' . $alumno->apellido)
+@section('title', 'Registrar Inscripción para ' . $alumno->nombre . ' ' . $alumno->apellido . ' | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
@@ -35,7 +35,7 @@
                             padding: 8px 12px;
                             font-size: 1rem;
                         }
-                    </style>                                        
+                    </style>
                     <label class="form-label">Curso</label>
                     <select name="id_curso" id="select-curso" class="form-select" required>
                         <option value="">Seleccione un curso</option>

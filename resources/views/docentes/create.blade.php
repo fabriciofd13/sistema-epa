@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Nuevo Docente')
+@section('title', 'Nuevo Docente | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"

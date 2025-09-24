@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Página en Construcción')
+@section('title', 'Página en Construcción | REGLA')
 
 @section('content_header')
 <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"

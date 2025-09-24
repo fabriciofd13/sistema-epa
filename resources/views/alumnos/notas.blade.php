@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Notas de ' . $alumno->nombre . ' ' . $alumno->apellido)
+@section('title', 'Notas de ' . $alumno->nombre . ' ' . $alumno->apellido.' | REGLA')
 
 @section('content_header')
     <h1>Notas de {{ $alumno->nombre }} {{ $alumno->apellido }} - {{ $curso->nombre ?? 'Curso no asignado' }}</h1>

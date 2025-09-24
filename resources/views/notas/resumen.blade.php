@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Resumen de Notas - ' . $materia->nombre . ' - ' . $curso->nombre)
+@section('title', 'Resumen de Notas - ' . $materia->nombre . ' - ' . $curso->nombre . ' | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded mb-3">
@@ -28,9 +28,12 @@
                             @if ($data['total'] > 0)
                                 <div class="mb-3">
                                     <div class="alert alert-info">Total Alumnos: <strong>{{ $data['total'] }}</strong></div>
-                                    <div class="alert alert-success">Aprobados: <strong>{{ $data['aprobados'] }}</strong></div>                                    
-                                    <div class="alert alert-warning">Desaprobados (4-5): <strong>{{ $data['desaprobados'] }}</strong></div>
-                                    <div class="alert alert-danger">Aplazados (1-3): <strong>{{ $data['aplazados'] }}</strong></div>
+                                    <div class="alert alert-success">Aprobados: <strong>{{ $data['aprobados'] }}</strong>
+                                    </div>
+                                    <div class="alert alert-warning">Desaprobados (4-5):
+                                        <strong>{{ $data['desaprobados'] }}</strong></div>
+                                    <div class="alert alert-danger">Aplazados (1-3):
+                                        <strong>{{ $data['aplazados'] }}</strong></div>
                                 </div>
                                 <div>
                                     <canvas id="chart-{{ $trimestre }}"></canvas>
@@ -51,42 +54,42 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             @foreach ($resumen as $trimestre => $data)
                 @if ($data['total'] > 0)
-                new Chart(document.getElementById("chart-{{ $trimestre }}"), {
-                    type: 'pie',
-                    data: {
-                        labels: ['Aprobados', 'Desaprobados (4-5)', 'Aplazados (1-3)'],
-                        datasets: [{
-                            label: 'Distribución de Notas',
-                            data: [
-                                {{ $data['aprobados'] }},
-                                {{ $data['desaprobados'] }},
-                                {{ $data['aplazados'] }}
-                            ],
-                            backgroundColor: [
-                                'rgba(40, 167, 69, 0.7)',
-                                'rgba(255, 193, 7, 0.7)',
-                                'rgba(220, 53, 69, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgba(40, 167, 69, 1)',
-                                'rgba(255, 193, 7, 1)',
-                                'rgba(220, 53, 69, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top'
+                    new Chart(document.getElementById("chart-{{ $trimestre }}"), {
+                        type: 'pie',
+                        data: {
+                            labels: ['Aprobados', 'Desaprobados (4-5)', 'Aplazados (1-3)'],
+                            datasets: [{
+                                label: 'Distribución de Notas',
+                                data: [
+                                    {{ $data['aprobados'] }},
+                                    {{ $data['desaprobados'] }},
+                                    {{ $data['aplazados'] }}
+                                ],
+                                backgroundColor: [
+                                    'rgba(40, 167, 69, 0.7)',
+                                    'rgba(255, 193, 7, 0.7)',
+                                    'rgba(220, 53, 69, 0.7)'
+                                ],
+                                borderColor: [
+                                    'rgba(40, 167, 69, 1)',
+                                    'rgba(255, 193, 7, 1)',
+                                    'rgba(220, 53, 69, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top'
+                                }
                             }
                         }
-                    }
-                });
+                    });
                 @endif
             @endforeach
         });

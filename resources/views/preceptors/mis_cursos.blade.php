@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Mis Cursos Asignados')
+@section('title', 'Mis Cursos Asignados | REGLA')
 
 @section('content_header')
     <h4>Mis Cursos Asignados</h4>

@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Agregar Alumnos - ' . $curso->nombre)
+@section('title', 'Agregar Alumnos - ' . $curso->nombre . ' | REGLA')
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
         style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
@@ -10,7 +10,7 @@
         </h4>
         <div class="d-flex">
             <button type="submit" form="formActualizar" class="btn btn-outline-success me-2">
-                <i class="fas fa-save"></i> Guardar Lista                
+                <i class="fas fa-save"></i> Guardar Lista
             </button>
             <a href="{{ route('cursos.show', $curso->id) }}" title="Volver [Ctrl + X]" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i>
@@ -164,14 +164,14 @@
         });
     </script>
     <script>
-        document.addEventListener("keydown", function(e) {                
-                if ((e.ctrlKey || e.metaKey) && (e.key === 'x' || e.key === 'X')) {
-                    // Evita la acción por defecto (abrir nueva ventana)
-                    e.preventDefault();
+        document.addEventListener("keydown", function(e) {
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'x' || e.key === 'X')) {
+                // Evita la acción por defecto (abrir nueva ventana)
+                e.preventDefault();
 
-                    window.location.href =
-                        "{{ route('cursos.show', $curso->id) }}";
-                }
-            });
+                window.location.href =
+                    "{{ route('cursos.show', $curso->id) }}";
+            }
+        });
     </script>
 @endsection

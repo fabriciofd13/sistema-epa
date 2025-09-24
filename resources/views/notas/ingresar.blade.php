@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Notas ' . $materia->nombre . ' - ' . $curso->nombre)
+@section('title', 'Notas ' . $materia->nombre . ' - ' . $curso->nombre . ' | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
@@ -99,14 +99,15 @@
                         <tr>
                             <th>Alumno</th>
                             @foreach ([
-                                '1er Trim' => 'primer_trimestre',
-                                '2do Trim' => 'segundo_trimestre',
-                                '3er Trim' => 'tercer_trimestre',
-                                'Final' => 'nota_final',
-                                'Diciembre' => 'nota_diciembre',
-                                'Febrero' => 'nota_febrero',
-                                'Previa' => 'previa',
-                                'Definitiva' => 'definitiva'] as $label => $campo)
+            '1er Trim' => 'primer_trimestre',
+            '2do Trim' => 'segundo_trimestre',
+            '3er Trim' => 'tercer_trimestre',
+            'Final' => 'nota_final',
+            'Diciembre' => 'nota_diciembre',
+            'Febrero' => 'nota_febrero',
+            'Previa' => 'previa',
+            'Definitiva' => 'definitiva',
+        ] as $label => $campo)
                                 <th>{{ $label }}</th>
                             @endforeach
                         </tr>
@@ -137,14 +138,14 @@
 @endsection
 
 @section('js')
-<script>
-    console.log('Página de cargada correctamente');
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-</script>
-<script src="{{ asset('js/custom.js') }}"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        console.log('Página de cargada correctamente');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+    </script>
+    <script src="{{ asset('js/custom.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             const inputs = Array.from(document.querySelectorAll(".nota-input"));
 
             function actualizarColor(input) {
@@ -217,7 +218,7 @@
                 });
             });
 
-            document.addEventListener("keydown", function (e) {
+            document.addEventListener("keydown", function(e) {
                 if (e.ctrlKey && (e.key === "g" || e.key === "G")) {
                     e.preventDefault();
                     document.getElementById("notasForm").submit();

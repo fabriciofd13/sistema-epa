@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Ficha Académica</title>
+    <title>Ficha Académica | REGLA</title>
     <style>
         @page {
             size: legal portrait;

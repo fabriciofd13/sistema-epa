@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Curso: ' . $curso->nombre)
+@section('title', 'Curso: ' . $curso->nombre . ' | REGLA')
 
 @section('content_header')
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
@@ -11,7 +11,8 @@
             <span class="badge bg-light border border-secondary"><strong>{{ $curso->anio_lectivo }}</strong></span>
         </h4>
         <div class="d-flex">
-            <a href="{{ route('cursos.imprimir', $curso->id) }}" target="_blank" class="btn btn-outline-dark ms-2" title="Imprimir PDF">
+            <a href="{{ route('cursos.imprimir', $curso->id) }}" target="_blank" class="btn btn-outline-dark ms-2"
+                title="Imprimir PDF">
                 <i class="fas fa-print"></i> Imprimir
             </a>
             <a href="{{ route('cursos.asignar_preceptor', $curso->id) }}" title="Asignar Preceptor [Ctrl + Q]"
@@ -50,55 +51,6 @@
 
         <div class="card">
             <div class="card-body">
-                {{-- <div class="table-responsive">
-                    @if (count($curso->historialAcademico))
-                        <table class="table table-striped" id="alumnosporcurso">
-                            <thead>
-                                <tr>
-                                    <th>Apellido</th>
-                                    <th>Nombre</th>
-                                    <th>DNI</th>
-                                    <th>Tutor/Telefono</th>
-                                    <th>Teléfono</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($curso->historialAcademico as $historial)
-                                    <tr>
-                                        <td>{{ $historial->alumno->apellido }}</td>
-                                        <td>{{ $historial->alumno->nombre }}</td>
-                                        <td>{{ $historial->alumno->dni }}</td>
-                                        <td>
-                                            {{ $historial->alumno->apellido_tutor ?? 'No registrado' }}
-                                            {{ $historial->alumno->nombre_tutor }}<br>
-                                            {{ $historial->alumno->celular_tutor ?? 'No registra celular' }}
-                                        </td>
-                                        <td>{{ $historial->alumno->telefono ?? 'No registrado' }}</td>
-                                        <td>
-                                            <a href="{{ route('historial.index', $historial->alumno->id) }}"
-                                                class="btn btn-info btn-sm" title="Ver Historial Académico">
-                                                <i class="fas fa-folder-open"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center">No hay alumnos inscriptos en este curso. <a
-                                                href="{{ route('cursos.agregarAlumnos', $curso->id) }}">Inscribir</a></td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    @else
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                No hay alumnos inscriptos en este curso. <a
-                                    href="{{ route('cursos.agregarAlumnos', $curso->id) }}">Inscribir</a>
-                            </div>
-                        </div>
-                    @endif
-                </div> --}}
                 <div class="table-responsive">
                     @if (count($curso->historialAcademico))
                         <table class="table table-striped" id="alumnosporcurso">
@@ -109,7 +61,7 @@
                                     <th>DNI</th>
                                     <th>Tutor/Telefono</th>
                                     <th>Teléfono</th>
-                                    <th>Previas</th> {{-- 👈 NUEVA COLUMNA --}}
+                                    <th>Previas</th> {{-- NUEVA COLUMNA --}}
                                     <th class="col-acciones">Acciones</th>
                                 </tr>
                             </thead>

@@ -23,7 +23,9 @@ class NotaController extends Controller
     }
     public function index()
     {
-        $cursos = CursoDivision::orderBy('id', 'asc')->get();
+        $cursos = CursoDivision::orderBy('anio_lectivo', 'desc')
+            ->orderBy('id', 'asc')
+            ->get();
 
         $cursosPorAnio = $cursos->groupBy('anio_lectivo');
 
@@ -134,104 +136,125 @@ class NotaController extends Controller
 
     public function resumen($curso_id, $materia_id)
     {
-        $curso = CursoDivision::findOrFail($curso_id);
+        $curso   = CursoDivision::findOrFail($curso_id);
         $materia = Materia::findOrFail($materia_id);
 
-        // Buscar historiales de ese curso y año lectivo
+        // Historales del curso en el año lectivo del curso
         $historiales = HistorialAcademico::where('id_curso', $curso->id)
             ->where('anio_lectivo', $curso->anio_lectivo)
             ->get();
 
-        // IDs de historiales
         $historialIds = $historiales->pluck('id');
 
-        // Traer todas las notas de esa materia en los historiales
+        // Todas las notas de esa materia en esos historiales
         $notas = Nota::whereIn('id_historial_academico', $historialIds)
             ->where('id_materia', $materia_id)
             ->get();
 
-        // Inicializar datos
+        // Inicializar todas las etapas (CORRECTO)
         $estadisticas = [
-            'primer_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'primer_trimestre'  => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
             'segundo_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
-            't ercer_trimestre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
-            'nota_final' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
-            'nota_diciembre' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
-            'nota_febrero' => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'tercer_trimestre'  => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_final'        => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_diciembre'    => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
+            'nota_febrero'      => ['total' => 0, 'aprobados' => 0, 'desaprobados' => 0, 'aplazados' => 0],
         ];
 
+        // Etapas a considerar
+        $trimestres = ['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'];
+        $cierres    = ['nota_final', 'nota_diciembre', 'nota_febrero'];
+
         foreach ($notas as $nota) {
-            foreach (['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'] as $trimestre) {
-                $valor = $nota->$trimestre;
+            // Trimestres
+            foreach ($trimestres as $etapa) {
+                $valor = $nota->$etapa;
+                if ($valor !== null && $valor !== '') {
+                    $estadisticas[$etapa]['total']++;
+                    $v = (float)$valor;
 
-                if (!is_null($valor)) {
-                    $estadisticas[$trimestre]['total']++;
+                    if (in_array((int)$v, [1, 2, 3], true)) {
+                        $estadisticas[$etapa]['aplazados']++;
+                    } elseif (in_array((int)$v, [4, 5], true)) {
+                        $estadisticas[$etapa]['desaprobados']++;
+                    } elseif ($v >= 6) {
+                        $estadisticas[$etapa]['aprobados']++;
+                    }
+                }
+            }
 
-                    if (in_array($valor, [1, 2, 3])) {
-                        $estadisticas[$trimestre]['aplazados']++;
-                    } elseif (in_array($valor, [4, 5])) {
-                        $estadisticas[$trimestre]['desaprobados']++;
-                    } elseif ($valor >= 6) {
-                        $estadisticas[$trimestre]['aprobados']++;
+            // Final / Diciembre / Febrero
+            foreach ($cierres as $etapa) {
+                $valor = $nota->$etapa;
+                if ($valor !== null && $valor !== '') {
+                    $estadisticas[$etapa]['total']++;
+                    $v = (float)$valor;
+
+                    if (in_array((int)$v, [1, 2, 3], true)) {
+                        $estadisticas[$etapa]['aplazados']++;
+                    } elseif (in_array((int)$v, [4, 5], true)) {
+                        $estadisticas[$etapa]['desaprobados']++;
+                    } elseif ($v >= 6) {
+                        $estadisticas[$etapa]['aprobados']++;
                     }
                 }
             }
         }
 
         return view('notas.resumen', [
-            'curso' => $curso,
+            'curso'   => $curso,
             'materia' => $materia,
-            'resumen' => $estadisticas
+            'resumen' => $estadisticas,
         ]);
     }
+
     public function graficosTrimestre($curso_id)
-{
-    $curso = CursoDivision::findOrFail($curso_id);
-    $materias = Materia::where('anio', $curso->anio)->get();
+    {
+        $curso = CursoDivision::findOrFail($curso_id);
+        $materias = Materia::where('anio', $curso->anio)->get();
 
-    $historiales = HistorialAcademico::where('id_curso', $curso->id)
-        ->where('anio_lectivo', $curso->anio_lectivo)
-        ->get();
-
-    $historialIds = $historiales->pluck('id');
-
-    $datos = [
-        'primer_trimestre' => ['materias' => []],
-        'segundo_trimestre' => ['materias' => []],
-        'tercer_trimestre' => ['materias' => []],
-    ];
-
-    foreach ($materias as $materia) {
-        $notas = Nota::whereIn('id_historial_academico', $historialIds)
-            ->where('id_materia', $materia->id)
+        $historiales = HistorialAcademico::where('id_curso', $curso->id)
+            ->where('anio_lectivo', $curso->anio_lectivo)
             ->get();
 
-        foreach (['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'] as $etapa) {
-            $resumen = [
-                'nombre' => $materia->nombre,
-                'aprobados' => 0,
-                'desaprobados' => 0,
-                'aplazados' => 0
-            ];
+        $historialIds = $historiales->pluck('id');
 
-            foreach ($notas as $nota) {
-                $valor = $nota->$etapa;
-                if (!is_null($valor)) {
-                    if ($valor >= 6) {
-                        $resumen['aprobados']++;
-                    } elseif (in_array($valor, [4, 5])) {
-                        $resumen['desaprobados']++;
-                    } elseif (in_array($valor, [1, 2, 3])) {
-                        $resumen['aplazados']++;
+        $datos = [
+            'primer_trimestre' => ['materias' => []],
+            'segundo_trimestre' => ['materias' => []],
+            'tercer_trimestre' => ['materias' => []],
+        ];
+
+        foreach ($materias as $materia) {
+            $notas = Nota::whereIn('id_historial_academico', $historialIds)
+                ->where('id_materia', $materia->id)
+                ->get();
+
+            foreach (['primer_trimestre', 'segundo_trimestre', 'tercer_trimestre'] as $etapa) {
+                $resumen = [
+                    'nombre' => $materia->nombre,
+                    'aprobados' => 0,
+                    'desaprobados' => 0,
+                    'aplazados' => 0
+                ];
+
+                foreach ($notas as $nota) {
+                    $valor = $nota->$etapa;
+                    if (!is_null($valor)) {
+                        if ($valor >= 6) {
+                            $resumen['aprobados']++;
+                        } elseif (in_array($valor, [4, 5])) {
+                            $resumen['desaprobados']++;
+                        } elseif (in_array($valor, [1, 2, 3])) {
+                            $resumen['aplazados']++;
+                        }
                     }
                 }
+
+                $datos[$etapa]['materias'][] = $resumen;
             }
-
-            $datos[$etapa]['materias'][] = $resumen;
         }
+
+        return view('notas.graficos_trimestre', compact('curso', 'datos'));
     }
-
-    return view('notas.graficos_trimestre', compact('curso', 'datos'));
-}
-
 }

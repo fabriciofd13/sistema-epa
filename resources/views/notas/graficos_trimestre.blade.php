@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Gráficos por Trimestre - ' . $curso->nombre . ' (' . $curso->anio_lectivo . ')')
+@section('title', 'Gráficos por Trimestre - ' . $curso->nombre . ' (' . $curso->anio_lectivo . ')' . ' | REGLA')
 
 @section('css')
     <style>
@@ -71,14 +71,14 @@
             <span class="badge bg-light border border-secondary"><strong>{{ $curso->nombre }}</strong></span>
             <span class="badge bg-light border border-secondary">{{ $curso->anio_lectivo }}</span>
         </h4>
-        
+
         <div class="no-print float-right">
             <button class="btn btn-outline-primary" onclick="window.print()">
                 <i class="fas fa-print"></i> Imprimir
             </button>
             <a href="{{ route('notas.show', $curso->id) }}" class="btn btn-outline-secondary">
                 <i class="fas fa-times"></i>
-            </a>            
+            </a>
         </div>
     </div>
 @endsection

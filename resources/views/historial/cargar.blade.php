@@ -1,9 +1,8 @@
 @extends('adminlte::page')
 
-@section('title', 'Notas de ' . $alumno->nombre . ' ' . $alumno->apellido)
+@section('title', 'Notas de ' . $alumno->nombre . ' ' . $alumno->apellido . ' | REGLA')
 
 @section('content_header')
-    {{-- <h3>Notas de {{ $alumno->nombre }} {{ $alumno->apellido }} - {{ $curso->nombre }}</h3> --}}
     <div class="d-flex align-items-center justify-content-between bg-light p-2 border rounded"
         style="box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <h4 class="m-0 pl-2" style="color: gray">

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Vincular Persona')
+@section('title', 'Vincular Persona | REGLA')
 
 @section('content_header')
     <h4>Vincular Persona al Usuario: {{ $user->name }}</h4>

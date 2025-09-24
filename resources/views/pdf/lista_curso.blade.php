@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Listado Curso {{ $curso->nombre }} - {{ $curso->anio_lectivo }}</title>
+    <title>Listado Curso {{ $curso->nombre }} - {{ $curso->anio_lectivo }} | REGLA</title>
     <style>
         @page { size: legal portrait; margin: 10mm 15mm 0mm 25mm; }
         body { font-family: DejaVu Sans, sans-serif; font-size: 10px; color: #111; }

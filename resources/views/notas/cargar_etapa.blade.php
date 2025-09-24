@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Cargar Notas - ' . ucfirst(str_replace('_', ' ', $etapa)))
+@section('title', 'Cargar Notas - ' . ucfirst(str_replace('_', ' ', $etapa)) . ' | REGLA')
 
 @section('content_header')
     <h1>Cargar {{ ucfirst(str_replace('_', ' ', $etapa)) }} para {{ $curso->nombre }}</h1>
@@ -116,11 +116,10 @@
                                         $nota = $notas[$historial->id . '-' . $materia->id] ?? null;
                                     @endphp
                                     <td>
-                                        <input type="text"
-                                        name="notas[{{ $historial->id }}][{{ $materia->id }}]"
-                                        class="form-control nota-input"
-                                        value="{{ isset($nota) && $nota->$etapa !== null ? intval($nota->$etapa) : '' }}">
-                                 
+                                        <input type="text" name="notas[{{ $historial->id }}][{{ $materia->id }}]"
+                                            class="form-control nota-input"
+                                            value="{{ isset($nota) && $nota->$etapa !== null ? intval($nota->$etapa) : '' }}">
+
                                     </td>
                                 @endforeach
                             </tr>
