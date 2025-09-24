@@ -78,7 +78,7 @@
                         </div>
                         <div class="card-body">
                             <div id="mensaje-inicial-curso" class="text-center text-muted">
-                                Ingrese nombre, año o preceptor para buscar un curso.
+                                Ingrese nombre, año o preceptor para buscar un curso. Ej: 1ro 2da o 5to 4ta Pintura
                             </div>
 
                             <table class="table table-bordered table-hover d-none" id="tabla-cursos">
