@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'EPA N° 1 Medardo Pantoja',
+    'title' => env('APP_TITLE', 'Sistema'),
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => ' | ' . env('APP_NAME', 'Sistema'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>EPA</b> Medardo Pantoja',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => env('APP_LOGO_TEXT', '<b>Sistema</b>'),
+    'logo_img' => env('APP_LOGO', 'vendor/adminlte/dist/img/AdminLTELogo.png'),
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'EPA Logo',
+    'logo_img_alt' => env('APP_NAME', 'Sistema'),
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => env('APP_LOGO', 'vendor/adminlte/dist/img/AdminLTELogo.png'),
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -113,7 +113,7 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => env('APP_LOGO', 'vendor/adminlte/dist/img/AdminLTELogo.png'),
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,

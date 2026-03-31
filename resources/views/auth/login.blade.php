@@ -438,12 +438,12 @@
         <div class="login-right">
             <div class="login-box">
                 <div class="login-logo text-center">
-                    <a href="home">
-                        <img src="{{ asset('vendor/adminlte/dist/img/AdminLTELogo.png') }}" alt="EPA Logo" height="50">
-                        <br><b>EPA1</b> Medardo Pantoja
+                    <a href="{{ url('/home') }}">
+                        <img src="{{ asset(config('app.logo')) }}" alt="Logo" height="50">
+                        <br>
+                        {!! config('app.logo_text') !!}
                     </a>
                 </div>
-
                 <h4 class="mb-4 text-center">Iniciar sesión</h4>
 
                 @if ($errors->any())
@@ -500,23 +500,31 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">
-                        <img src="{{ asset('img/regla_logo.png') }}" alt="Logo REGLA" width="30" height="30">
-                    <p class="text-justify pl-2 pr-2"><strong>R.E.G.L.A.</strong> (Registro Electrónico de Gestión y Logística
-                        Académica) es un sistema
-                        diseñado para optimizar
-                        la administración escolar, permitiendo a los docentes y preceptores registrar notas, asistencias,
-                        novedades y gestionar la información académica de manera eficiente.</p>
+                    <div class="text-center mb-3">
+                        <img src="{{ asset(config('app.logo')) }}" alt="Logo" width="30" height="30">
+                    </div>
+
+                    <p class="text-justify pl-2 pr-2">
+                        <strong>{{ config('app.title') }}</strong>
+                        {{ config('app.descripcion') }}
                     </p>
-                    <p><strong>Versión:</strong> 1.0.0<br>
-                        <strong>Desarrollado por:</strong> Fabricio Fernández<br>
-                        <strong>Contacto de Soporte:</strong> fabridfernandez@gmail.com
+
+                    <p>
+                        <strong>Versión:</strong> {{ config('app.version') }}<br>
+                        <strong>Desarrollado por:</strong> {{ config('app.support_name') }}<br>
+                        <strong>Contacto de Soporte:</strong> {{ config('app.support_email') }}
                     </p>
+
                     <hr>
-                    <p><strong>Institución:</strong> Escuela Provincial de Artes N° 1 "Medardo Pantoja"</p>
-                    <p><strong>Contacto de la Institución:</strong> escueladeartes1jujuy@gmail.com</p>
-                    <p><strong>Sitio Web:</strong> <a href="https://www.escueladeartes1.edu.ar"
-                            target="_blank">www.escueladeartes1.edu.ar</a></p>
+
+                    <p><strong>Institución:</strong> {{ config('app.institucion') }}</p>
+                    <p><strong>Contacto de la Institución:</strong> {{ config('app.email_institucion') }}</p>
+                    <p>
+                        <strong>Sitio Web:</strong>
+                        <a href="{{ config('app.url_institucion') }}" target="_blank">
+                            {{ parse_url(config('app.url_institucion'), PHP_URL_HOST) ?? config('app.url_institucion') }}
+                        </a>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

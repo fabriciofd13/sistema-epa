@@ -122,5 +122,15 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
-
+    //Para usar logos personalizados, nombres ,etc
+    'logo' => env('APP_LOGO', 'img/default.png'),
+    'title' => env('APP_TITLE', 'Sistema'),
+    'institucion' => env('APP_INSTITUCION', ''),
+    'email_institucion' => env('APP_EMAIL_INSTITUCION', ''),
+    'url_institucion' => env('APP_URL_INSTITUCION', '#'),
+    'descripcion' => env('APP_DESCRIPCION', ''),
+    'version' => env('APP_VERSION', '1.0.0'),
+    'support_name' => env('APP_SUPPORT_NAME', ''),
+    'support_email' => env('APP_SUPPORT_EMAIL', ''),
+    'logo_text' => env('APP_LOGO_TEXT', '<b>Sistema</b>'),
 ];

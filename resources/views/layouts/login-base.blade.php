@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar sesión | REGLA (EPA1)</title>
+    <title>Iniciar sesión | REGLA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Estilos AdminLTE y FontAwesome --}}
